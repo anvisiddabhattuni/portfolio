@@ -7,28 +7,37 @@ import { PROJECTS, type Project } from '../content';
 
 /** A photo for each project so visitors can "click into" them. */
 const PROJECT_PHOTO: Record<string, string> = {
-  riskradar: '/photos/banff-summit.png',
-  analytico: '/photos/rome-skyline.png',
+  riskradar: '/photos/risk-radar-cover.png',
+  analytico: '/photos/analytico-cover.svg',
+};
+
+const PROJECT_PHOTO_CLASS: Record<string, string | undefined> = {
+  riskradar: 'trailstop__shot--risk',
+  analytico: 'trailstop__shot--logo',
+};
+
+const PROJECT_FRAME_CLASS: Record<string, string | undefined> = {
+  riskradar: 'trailstop__frame--risk',
 };
 
 /* ---------------- The greeting (Kultiveret-style welcome) ---------------- */
-const Greeting: React.FC = () => (
-  <section className="greet" aria-label="Welcome">
+export const Greeting: React.FC = () => (
+  <section className="greet walk-panel" aria-label="Welcome">
     <div className="greet__inner">
       <p className="greet__eyebrow">
         <MaskedReveal>The dogs insisted</MaskedReveal>
       </p>
       <h2 className="greet__title">
-        <MaskedReveal>Hello — I&apos;m Anvi.</MaskedReveal>
+        <MaskedReveal>Hello, I&apos;m Anvi.</MaskedReveal>
         <MaskedReveal delay={0.12}>
           <em>Walk with me.</em>
         </MaskedReveal>
       </h2>
       <Reveal delay={0.3}>
         <p className="greet__lede">
-          They&apos;ll lead the way down the path. Each stop is a real project —
-          open one to see the problem, the users, the product decisions, what I
-          shipped, and the impact.
+          They&apos;ll lead the way down the path. A bit about me first, then
+          real projects to step into: the problem, the users, the decisions, and
+          what shipped.
         </p>
       </Reveal>
       <Reveal delay={0.45} className="greet__dogs">
@@ -63,8 +72,13 @@ const TrailStop: React.FC<{ p: Project; index: number; onOpen: () => void }> = (
           onClick={onOpen}
           aria-label={`Open project ${p.title}`}
         >
-          <span className="trailstop__frame">
-            <img src={PROJECT_PHOTO[p.id]} alt={p.title} loading="lazy" />
+          <span className={`trailstop__frame${PROJECT_FRAME_CLASS[p.id] ? ` ${PROJECT_FRAME_CLASS[p.id]}` : ''}`}>
+            <img
+              src={PROJECT_PHOTO[p.id]}
+              alt={p.title}
+              loading="lazy"
+              className={PROJECT_PHOTO_CLASS[p.id]}
+            />
             <span className="trailstop__enter">Step inside →</span>
           </span>
           <span className="trailstop__meta">
@@ -105,7 +119,11 @@ const ProjectModal: React.FC<{ p: Project; onClose: () => void }> = ({ p, onClos
         ×
       </button>
       <div className="modal__hero">
-        <img src={PROJECT_PHOTO[p.id]} alt={`${p.title} — project visual`} />
+        <img
+          src={PROJECT_PHOTO[p.id]}
+          alt={`${p.title}, project visual`}
+          className={PROJECT_PHOTO_CLASS[p.id]}
+        />
       </div>
 
       <p className="modal__kicker">{p.timeframe}</p>
@@ -177,21 +195,19 @@ const ProjectModal: React.FC<{ p: Project; onClose: () => void }> = ({ p, onClos
   </motion.div>
 );
 
-/* ---------------- The pathway: greeting + winding trail of projects ---------------- */
-export const Pathway: React.FC = () => {
+/* ---------------- Case studies along the path ---------------- */
+export const CaseStudies: React.FC = () => {
   const [active, setActive] = useState<Project | null>(null);
 
   return (
-    <section className="pathway walk-panel" id="projects" aria-label="Projects along the path">
-      <Greeting />
-
+    <section className="pathway walk-panel" id="case-studies" aria-label="Case studies along the path">
       <div className="pathway__trail">
         <div className="pathway__spine" aria-hidden="true" />
         <Reveal className="pathway__head" style={{ textAlign: 'center' }}>
           <p className="eyebrow">Stops along the walk</p>
           <h2><MaskedReveal>Case studies</MaskedReveal></h2>
           <p className="lede lede--center">
-            Click a photo to step off the path and into the work — the problem,
+            Click a photo to step off the path and into the work: the problem,
             the users, the decisions, and what shipped.
           </p>
         </Reveal>
@@ -207,8 +223,8 @@ export const Pathway: React.FC = () => {
           <p className="eyebrow">The walk isn&apos;t over yet</p>
           <h3>Further down the trail</h3>
           <p className="lede lede--center">
-            Keep scrolling — the dogs have more to show you. Up next: who I am,
-            where I&apos;ve been, what I carry, and how to say hello.
+            Keep scrolling. The dogs have more to show you. Up next: where
+            I&apos;ve been, what I carry, and how to say hello.
           </p>
           <span className="pathway__scroll" aria-hidden="true">↓</span>
         </Reveal>

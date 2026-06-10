@@ -220,14 +220,22 @@
     top: auto;
     bottom: 18px;
     transform: none;
-    gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: min(100vw - 24px, 420px);
+    gap: 4px;
     padding: 8px;
   }
   .trail-nav button {
     min-width: auto;
-    padding: 10px;
+    padding: 8px 10px;
+    gap: 6px;
   }
-  .trail-nav__label { display: none; }
+  .trail-nav__label {
+    display: inline;
+    font-size: 11px;
+  }
   .enter-band {
     min-height: 56vh;
     padding: 32px 16px 24px;

@@ -16,12 +16,12 @@ export const PROFILE = {
 export const ABOUT = {
   name: 'Anvi',
   intro:
-    "I'm Anvi — CS student at UT Dallas, product-minded builder, and unofficial tour guide for two very opinionated dogs. I work where product, AI, design, and engineering meet, and I like owning a problem end to end until the answer feels obvious.",
+    "I'm Anvi, a CS student at UT Dallas and product-minded builder. These two dogs are my unofficial tour guides. I work where product, AI, design, and engineering meet, and I like owning a problem end to end until the answer feels obvious.",
   interests: ['Product strategy', '0→1 products', 'AI-powered features', 'React · Next.js · TypeScript', 'Design systems & UX', 'Data-informed decisions'],
   background:
-    'I lead front-end on hackathon-winning teams, run marketing and design for two of UT Dallas’ largest tech orgs, and ship side projects from the first Figma frame to production on Vercel. I’m comfortable across the whole arc — discovery, design, build, and launch.',
+    'I lead front-end on hackathon-winning teams, run marketing and design for two of UT Dallas’ largest tech orgs, and ship side projects from the first Figma frame to production on Vercel. I’m comfortable across discovery, design, build, and launch.',
   goals:
-    'Pursuing a career in product management — building at the intersection of user problems, design, and engineering, and shipping products people actually use.',
+    'Pursuing a career in product management: building at the intersection of user problems, design, and engineering, and shipping products people actually use.',
 };
 
 export interface Project {
@@ -53,31 +53,31 @@ export const PROJECTS: Project[] = [
     id: 'riskradar',
     object: 'lantern',
     title: 'Risk Radar',
-    tagline: 'Turning a dense home-risk report into something you can act on',
+    tagline: 'Home insurance that helps you act on risk before damage happens',
     role: 'Front-End Lead · 4-person team',
     timeframe: 'Apr 2026 · WEHack 2026',
     tags: ['Product', 'AI', 'Front-end', 'Data'],
-    stack: ['React', 'Flask', 'Python', 'MongoDB', 'OpenAI'],
+    stack: ['React', 'Flask', 'Python', 'MongoDB', 'OpenAI', 'FEMA & NOAA'],
     problem:
-      'Homeowners get risk and insurance information as dense, jargon-heavy reports. It’s technically accurate and nearly impossible to act on — so most people ignore it until something actually breaks.',
+      'Insurance is reactive. Homeowners usually only deal with their policy after something goes wrong. There was no easy way to see a home’s risks before they turn into damage, or to know which fixes actually matter most.',
     users:
-      'Homeowners (especially first-time buyers) trying to understand what’s genuinely risky about their house, and the insurers who want them to take preventative action before a claim.',
+      'Homeowners who enter their address, upload inspection reports, and take a short quiz to understand what is risky about their house. We also built with insurers in mind: people who want preventative action, not just claims.',
     insight:
-      'People don’t reason about risk as a single score — they reason room by room. “Is the kitchen a fire risk? Is the basement going to flood?” Mapping risk onto physical space makes an abstract number instantly legible.',
+      'The team could show scores, factor breakdowns, and external data from FEMA and NOAA. The risk was overwhelming people with numbers. My call as front-end lead was to make the interactive floor plan the core differentiator: risk mapped to where they live, not an abstract score.',
     decisions: [
-      'Led with an interactive floor plan instead of a score dashboard, so risk reads spatially — the way people actually picture their home.',
-      'Color-coded risk by category (fire, water, weather) at the room level, so the most urgent fixes surface first.',
-      'Made every score explainable — each number traces back to the report, claim, or external data that produced it.',
+      'Led with an interactive floor plan instead of a score dashboard, so risk reads spatially the way people picture their home.',
+      'Mapped three risk categories (fire, water, weather) to room-level context so the most urgent fixes surface first.',
+      'Made every score explainable with a factor-by-factor breakdown tied back to the report, quiz, or external data.',
     ],
     tradeoffs:
-      'I scoped the floor plan to a curated set of room templates instead of free-form drawing. Less flexible, but it let us ship a polished, legible v1 inside a hackathon timebox and kept the data model clean.',
+      'I scoped the floor plan to curated room templates instead of free-form drawing. Less flexible, but it let us ship a polished, legible v1 inside a hackathon timebox and kept the data model clean.',
     technical:
-      'Owned the React front-end and the interactive SVG floor-plan layer. Worked across the stack on a Flask + Python pipeline that fused unstructured inspection reports, claims history, quiz inputs, and external FEMA/NOAA data into one explainable risk profile (stored in MongoDB), with OpenAI summarizing findings into plain-language recommendations.',
+      'Owned the React front end and the interactive SVG floor-plan layer. Worked across the stack on a Flask + Python pipeline that fused uploaded documents, quiz answers, claims history, and FEMA/NOAA data into one household risk profile in MongoDB, with OpenAI summarizing findings into plain-language recommendations.',
     impact:
-      'Won the State Farm Challenge at WEHack 2026. Judges singled out the floor-plan view as the differentiator — it turned an abstract score into something a homeowner could act on in minutes.',
+      'Won the State Farm Challenge at WEHack 2026. Judges responded to how the floor plan turned abstract risk into concrete, room-level insight a homeowner could act on in minutes.',
     next:
-      'Add free-form room editing and a prioritized “fix-it” checklist with rough cost estimates, then validate the scoring weights against real claims data.',
-    link: { label: 'Devpost', href: 'https://devpost.com/anvisiddabhattuni' },
+      'Real-time weather and hazard alerts, maintenance timeline tracking, predictive risk modeling, and progress tracking that shows how user actions improve their score.',
+    link: { label: 'Devpost', href: 'https://devpost.com/software/risk-radar-6mv83t' },
     metrics: [
       { label: 'State Farm Challenge', value: 'Winner' },
       { label: 'Person team', value: '4' },
@@ -88,34 +88,34 @@ export const PROJECTS: Project[] = [
     id: 'analytico',
     object: 'birdhouse',
     title: 'Analytico',
-    tagline: 'Social analytics that ends in a recommendation, not a chart',
-    role: 'Front-End Developer · small team',
+    tagline: 'Analytics for creators who need to know what to do next',
+    role: 'Creator + Front-End Lead · Founding team',
     timeframe: 'Jan 2025 – Present',
     tags: ['Product', 'Front-end', 'Design'],
     stack: ['React', 'Tailwind', 'Figma'],
     problem:
-      'Content managers spend hours each week manually pulling numbers from scattered platform dashboards just to answer “how did this campaign do?” — and rarely walk away with a clear next step.',
+      'Creators and social media managers do not know how to grow their accounts. Their data is scattered and hard to read, so it is tough to see where they are falling short or what to do next.',
     users:
-      'Social and content managers who own performance but don’t have the time (or mandate) to be data analysts.',
+      'Social media managers and creators who own performance but are not full-time data analysts.',
     insight:
-      'The real job isn’t “show me charts” — it’s “tell me what to do next.” Analytics only earns its keep when it ends in a recommendation.',
+      'The exciting idea was an AI growth agent, but none of us knew how to build and connect one yet. The right first step was analytics dashboards that show where users are falling short, with the agent as a later phase.',
     decisions: [
-      'Designed the dashboard around recommendations, not raw metrics — every view ends in a suggested action.',
-      'Built reusable report views so a manager can go from data to a shareable summary in a couple of clicks.',
-      'Kept the UI calm and scannable so non-analysts aren’t overwhelmed.',
+      'Built analytics dashboards first instead of chasing the AI agent upfront.',
+      'Designed every view to end in a suggested next step, not just raw metrics.',
+      'Kept the UI calm and scannable so non-analysts are not overwhelmed.',
     ],
     tradeoffs:
-      'Prioritized a tight, opinionated dashboard for a few key platforms over broad-but-shallow coverage — depth and clarity first, breadth later.',
+      'Deferred the AI agent to focus on what the team could actually ship. That meant delivering user value now instead of betting everything on a feature we had not figured out yet.',
     technical:
-      'Translating Figma mockups into a responsive React + Tailwind front-end — dashboards, report views, and recommendation flows. Currently in active development.',
+      'Co-created the product idea and led the front end from Figma wireframes to a responsive React + Tailwind UI: dashboards, report views, and recommendation flows.',
     impact:
-      'In active development with a small team. [insert beta-user count] · [insert before/after reporting-time result] once piloted.',
+      'Pre-launch. We have a complete Figma design and a built front end, but the backend was never connected, so the product is not live yet.',
     next:
-      'Run a closed beta with a handful of content managers, instrument time-to-report, and use it to validate which recommendations actually get acted on.',
+      'Set up a shared front-end/back-end contract from day one: what data the UI needs and what the API provides, so both sides build toward integration instead of parallel silos.',
     metrics: [
-      { label: 'shipping soon', value: 'In dev' },
-      { label: 'Tailwind + Figma', value: 'React' },
-      { label: 'design → UI', value: 'Figma' },
+      { label: 'Status', value: 'Pre-launch' },
+      { label: 'Role', value: 'FE Lead' },
+      { label: 'Stack', value: 'React' },
     ],
   },
 ];
@@ -130,11 +130,11 @@ export interface Experience {
 }
 
 export const EXPERIENCES: Experience[] = [
-  { id: 'acm', title: 'ACM UTD', role: 'Marketing Co-Director', timeframe: 'Jan 2026 – Present', blurb: 'The largest computing org on campus (1,000+ members). I lead the marketing and design team end to end — and drove February 2026 to 314K+ Instagram views and 15.7K accounts reached, the org’s strongest month on record, by tightening cadence and aligning creative to each division’s audience.', tint: 'var(--sky-soft)' },
+  { id: 'acm', title: 'ACM UTD', role: 'Marketing Co-Director', timeframe: 'Jan 2026 – Present', blurb: 'The largest computing org on campus (1,000+ members). I lead the marketing and design team end to end, and drove February 2026 to 314K+ Instagram views and 15.7K accounts reached, the org’s strongest month on record, by tightening cadence and aligning creative to each division’s audience.', tint: 'var(--sky-soft)' },
   { id: 'ktp', title: 'Kappa Theta Pi', role: 'VP of Marketing', timeframe: 'Jan 2026 – Present', blurb: 'Professional technology fraternity at UT Dallas. I own brand and marketing for recruitment and professional events, building multi-week Rush campaigns with the exec board and tying marketing output to concrete chapter-growth goals (applicant volume, event turnout).', tint: 'var(--bloom-soft)' },
   { id: 'beats', title: 'Beats by Dre', role: 'Data Analytics Extern', timeframe: 'Dec 2024 – Mar 2025', blurb: 'Analyzed marketing datasets to surface targeting and content insights for campaign teams, and built lightweight LLM-assisted reporting workflows that cut turnaround time on recurring requests.', tint: 'var(--sun-soft)' },
   { id: 'hs', title: 'HSBuilds', role: 'Lead Developer', timeframe: 'Aug 2023 – Aug 2024', blurb: 'Student-run nonprofit web-dev group. Led developers and designers across 10+ nonprofit projects on GitHub, shipping responsive sites while owning client communication, requirements, and delivery scheduling.', tint: 'var(--leaf-light)' },
-  { id: 'hacks', title: 'Hackathons', role: 'Winner & finalist', timeframe: 'Ongoing', blurb: 'Front-end lead on hackathon teams — fast discovery, scrappy prototypes, and demos that lead with the user problem. Most recently won the State Farm Challenge at WEHack 2026.', tint: 'var(--sky-soft)' },
+  { id: 'hacks', title: 'Hackathons', role: 'Winner & finalist', timeframe: 'Ongoing', blurb: 'Front-end lead on hackathon teams: fast discovery, scrappy prototypes, and demos that lead with the user problem. Most recently won the State Farm Challenge at WEHack 2026.', tint: 'var(--sky-soft)' },
 ];
 
 export const SKILLS = [

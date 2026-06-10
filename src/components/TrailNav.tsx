@@ -1,24 +1,49 @@
 import React, { useEffect, useState } from 'react';
 
 const STOPS = [
-  { id: 'projects', label: 'Work' },
   { id: 'about', label: 'About' },
+  { id: 'case-studies', label: 'Case studies' },
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
 ];
 
+function getWalkRoot(): HTMLElement | null {
+  return document.querySelector('.walk');
+}
+
+function scrollToSection(id: string) {
+  const root = getWalkRoot();
+  if (!root) return;
+
+  const tryScroll = (attempts = 0) => {
+    const el = document.getElementById(id);
+    if (!el) {
+      if (attempts < 24) requestAnimationFrame(() => tryScroll(attempts + 1));
+      return;
+    }
+    const offset = el.getBoundingClientRect().top - root.getBoundingClientRect().top;
+    root.scrollTo({ top: root.scrollTop + offset, behavior: 'smooth' });
+  };
+
+  tryScroll();
+}
+
 export const TrailNav: React.FC = () => {
-  const [active, setActive] = useState('projects');
+  const [active, setActive] = useState('about');
 
   useEffect(() => {
-    const root = document.querySelector('.walk');
+    const root = getWalkRoot();
     if (!root) return;
 
-    // Vertical flow: active section is the one that spans the viewport midpoint.
     const compute = () => {
-      const mid = window.innerHeight * 0.5;
+      const walk = getWalkRoot();
+      if (!walk) return;
+
+      const rootRect = walk.getBoundingClientRect();
+      const mid = rootRect.top + walk.clientHeight * 0.5;
       let current = STOPS[0].id;
+
       for (const s of STOPS) {
         const el = document.getElementById(s.id);
         if (!el) continue;
@@ -29,6 +54,7 @@ export const TrailNav: React.FC = () => {
         }
         if (rect.top <= mid) current = s.id;
       }
+
       setActive(current);
     };
 
@@ -48,9 +74,10 @@ export const TrailNav: React.FC = () => {
           key={s.id}
           data-active={active === s.id}
           aria-label={`Go to ${s.label}`}
+          title={s.label}
           aria-current={active === s.id ? 'true' : undefined}
           type="button"
-          onClick={() => document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          onClick={() => scrollToSection(s.id)}
         >
           <span className="trail-nav__dot" aria-hidden="true" />
           <span className="trail-nav__label">{s.label}</span>

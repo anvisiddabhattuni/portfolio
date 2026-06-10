@@ -11,7 +11,7 @@ export const AboutStop: React.FC = () => (
   <section className="cat-section cat-section--a walk-panel" id="about" aria-label="About Anvi">
     <div className="cat-section__inner">
       <Reveal className="cat-head">
-        <p className="eyebrow">First rest stop</p>
+        <p className="eyebrow">A little about me</p>
         <h2><MaskedReveal>About</MaskedReveal></h2>
       </Reveal>
 
@@ -43,8 +43,8 @@ export const AboutStop: React.FC = () => (
 
         <Reveal delay={0.1} className="about-edit__media">
           <figure className="about-edit__frame about-edit__frame--headshot">
-            <img src={HEADSHOT.src} alt={`${HEADSHOT.caption} — ${HEADSHOT.place}`} loading="lazy" />
-            <figcaption>{HEADSHOT.caption} — {HEADSHOT.place}</figcaption>
+            <img src={HEADSHOT.src} alt={`${HEADSHOT.caption}, ${HEADSHOT.place}`} loading="lazy" />
+            <figcaption>{HEADSHOT.caption}, {HEADSHOT.place}</figcaption>
           </figure>
           <div className="about-edit__dogs" aria-hidden="true">
             <RealDogPair style={{ width: '100%', height: 'auto' }} />
@@ -131,7 +131,7 @@ export const SkillsStop: React.FC = () => (
       <Reveal className="cat-head">
         <p className="eyebrow">What I carry on the walk</p>
         <h2><MaskedReveal>Skills</MaskedReveal></h2>
-        <p className="cat-head__lede">What&apos;s in the bag for this walk — grouped by how the work actually gets done.</p>
+        <p className="cat-head__lede">What&apos;s in the bag for this walk, grouped by how the work actually gets done.</p>
       </Reveal>
 
       <div className="skillset">
@@ -180,7 +180,7 @@ export const ContactStop: React.FC = () => {
           <Reveal className="contact-edit__col">
             <p className="contact-edit__lede">
               We made it to the end of the walk. Leave a note below, or reach me
-              directly through the links — I read everything.
+              directly through the links. I read everything.
             </p>
             <div className="contact-edit__links">
               <a className="link-pill" href={`mailto:${CONTACT.email}`}>Email ↗</a>

@@ -40,7 +40,7 @@ export const OpeningScene: React.FC<{ onEnter: () => void }> = ({ onEnter }) => 
   });
 
   return (
-    <section className="door-scene" data-leaving={leaving} aria-label="Front page — enter the portfolio">
+    <section className="door-scene" data-leaving={leaving} aria-label="Front page, enter the portfolio">
       <div className="door-scene__paper" aria-hidden="true" />
 
       <motion.header className="door-scene__bar" {...drop(0)}>
@@ -61,7 +61,7 @@ export const OpeningScene: React.FC<{ onEnter: () => void }> = ({ onEnter }) => 
         </motion.h1>
 
         <motion.p className="door-scene__positioning" {...drop(0.12)}>
-          CS student at UT&nbsp;Dallas. The dogs are ready — come take a walk through
+          CS student at UT&nbsp;Dallas. The dogs are ready. Come take a walk through
           everything I&apos;ve built at the intersection of{' '}
           <strong>product</strong>, <strong>AI</strong>, <strong>design</strong> &{' '}
           <strong>engineering</strong>.

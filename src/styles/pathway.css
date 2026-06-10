@@ -167,6 +167,23 @@
   background: var(--paper-warm);
   filter: none;
 }
+.trailstop__frame img.trailstop__shot--logo {
+  object-fit: contain;
+  background: var(--paper-warm);
+  padding: clamp(14px, 3vw, 24px);
+  filter: none;
+}
+.trailstop__frame--risk {
+  background: #000;
+  padding: 0;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.trailstop__frame img.trailstop__shot--risk {
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  filter: none;
+}
 .trailstop__enter {
   position: absolute;
   left: 50%;
@@ -551,6 +568,20 @@
 .modal--withshot .modal__hero img[src*='placeholder'] {
   object-fit: contain;
   background: var(--paper-warm);
+}
+.modal--withshot .modal__hero img.trailstop__shot--logo {
+  object-fit: contain;
+  background: var(--paper-warm);
+  padding: clamp(20px, 4vw, 36px);
+}
+.modal--withshot .modal__hero:has(img.trailstop__shot--risk) {
+  background: #000;
+}
+.modal--withshot .modal__hero img.trailstop__shot--risk {
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  filter: none;
 }
 
 /* ---- case-study modal ---- */
