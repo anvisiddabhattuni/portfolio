@@ -1,0 +1,24 @@
+---
+description: Always apply Claude's frontend-design skill before any UI/frontend change
+globs: src/**/*.{tsx,jsx,ts,js,css}
+alwaysApply: true
+---
+
+# Use the frontend-design skill first
+
+Before editing or creating ANY frontend code (components, pages, styles,
+animations) in this project, FIRST read and follow the skill at
+`.cursor/skills/frontend-design/SKILL.md`.
+
+Apply its guidance on every change:
+
+- Commit to a clear, bold aesthetic direction before writing code.
+- Distinctive typography (no generic system/Inter/Roboto/Arial fonts).
+- Cohesive color system via CSS variables; dominant colors with sharp accents.
+- High-impact, well-orchestrated motion (use `framer-motion`, already installed).
+- Intentional spatial composition; atmosphere and texture over flat solid colors.
+- Avoid generic "AI-generated" looks, cliché gradients, and predictable layouts.
+
+This project's established aesthetic is a warm, vintage, analog/editorial
+illustrated portfolio (cream paper, near-black ink, `Fraunces` serif display,
+hand-drawn dogs). Keep new work cohesive with that point of view.
