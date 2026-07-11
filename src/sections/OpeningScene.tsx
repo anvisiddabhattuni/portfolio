@@ -134,9 +134,9 @@ export const OpeningScene: React.FC<{ onEnter: () => void }> = ({ onEnter }) => 
                 href={CONTACT.resume}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Open résumé (PDF) in a new tab"
+                aria-label="Open resume (PDF) in a new tab"
               >
-                Résumé ↗
+                Resume ↗
               </a>
             </motion.div>
           )}

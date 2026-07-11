@@ -1,15 +1,13 @@
 /* ============================================================
    Home — product-management portfolio, single page.
    NKORA-style rhythm: every section wears its own palette color.
-   Navigation is a vertical stack of folder tabs peeking in from
-   the right edge, with the old folder dock's proximity-magnify
-   animation and a scrollspy that pulls the active tab out.
+   Navigation is a fixed top rail with a sliding active tab and
+   scrollspy behavior.
    The Frame-1 hero pins, splits in four directions on scroll,
    and lands directly on the About section.
    ============================================================ */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import {
-  AnimatePresence,
   motion,
   useScroll,
   useSpring,
@@ -18,6 +16,7 @@ import {
 import { PROFILE, CONTACT } from '../content';
 import { WaveArt } from '../components/WaveArt';
 import { RisingWords } from '../components/RisingWords';
+import { InteractiveHoverButton, InteractiveHoverLink } from '../components/ui/interactive-hover-button';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { CaseStudies } from './Pathway';
 import { AboutStop, ExperienceStop, SkillsStop } from './Stops';
@@ -129,7 +128,7 @@ function SectionIntro({
   );
 }
 
-/* ---------------- vertical folder tabs, right edge ---------------- */
+/* ---------------- horizontal top section tabs ---------------- */
 
 interface Tab {
   id: string;
@@ -188,104 +187,88 @@ function useActiveSection(ids: string[]) {
   return active;
 }
 
-/** Expandable corner nav: a small cream pill in the top-right that
-    unfolds into a paper panel listing every section with its palette
-    dot. Items stagger in; the active section is marked in garnet. */
-function CornerNav() {
-  const [open, setOpen] = useState(false);
+function scrollToSection(id: string) {
+  // the hero is sticky inside a taller wrapper, so scrollIntoView
+  // stops mid-split; Home means the very top of the page
+  if (id === 'hero') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.history.replaceState(null, '', '#hero');
+    return;
+  }
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  window.history.replaceState(null, '', `#${id}`);
+}
+
+/** TopNav: a persistent horizontal section rail with a springy active tab. */
+function TopNav() {
   const active = useActiveSection(SECTION_IDS) || TABS[0].id;
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
-
-  const goTo = (id: string) => {
-    setOpen(false);
-    // the hero is sticky inside a taller wrapper, so scrollIntoView
-    // stops mid-split; Home means the very top of the page
-    if (id === 'hero') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.history.replaceState(null, '', '#hero');
-      return;
-    }
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window.history.replaceState(null, '', `#${id}`);
-  };
-
   return (
-    <div className="corner-nav">
-      <motion.button
-        type="button"
-        className="corner-nav__toggle"
-        onClick={() => setOpen((v) => !v)}
-        whileHover={{ scale: 1.05, y: -1 }}
-        whileTap={{ scale: 0.94 }}
-        aria-expanded={open}
-        aria-label={open ? 'Close menu' : 'Open menu'}
-      >
-        <span>Menu</span>
-        <motion.span
-          className="corner-nav__icon"
-          aria-hidden="true"
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-        >
-          +
-        </motion.span>
-      </motion.button>
+    <motion.nav
+      className="top-nav"
+      aria-label="Sections"
+      initial={{ opacity: 0, x: '-50%', y: -16 }}
+      animate={{ opacity: 1, x: '-50%', y: 0 }}
+      transition={{ duration: 0.45, ease }}
+    >
+      {TABS.map((t, i) => {
+        const isActive = active === t.id;
+        const activeTone =
+          t.id === 'hero'
+            ? {
+                bg: 'var(--cream)',
+                ink: 'var(--garnet)',
+                dot: 'var(--cream)',
+                border: 'var(--garnet)',
+                dotBorder: 'var(--garnet)',
+              }
+            : t.id === 'contact'
+              ? {
+                  bg: 'var(--yale)',
+                  ink: 'var(--amber)',
+                  dot: 'var(--amber)',
+                  border: 'var(--yale)',
+                  dotBorder: 'var(--amber)',
+                }
+              : t.id === 'case-studies'
+              ? { bg: 'var(--garnet)', ink: 'var(--amber)', dot: 'var(--amber)' }
+              : { ...TAB_TONES[t.id], dot: TAB_TONES[t.id].ink };
+        const buttonVars = {
+          '--hover-bg': activeTone.bg,
+          '--hover-fg': activeTone.ink,
+          '--nav-dot': activeTone.bg,
+          '--nav-active-dot': activeTone.dot,
+          '--nav-active-border': activeTone.border ?? 'transparent',
+          '--nav-dot-border': activeTone.dotBorder ?? 'transparent',
+          '--nav-active-dot-border': activeTone.dotBorder ?? 'transparent',
+        } as CSSProperties;
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              className="corner-nav__scrim"
-              onClick={() => setOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              aria-hidden="true"
+        return (
+          <motion.div
+            key={t.id}
+            className="top-nav__slot"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.04 * i, type: 'spring', stiffness: 320, damping: 28 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
+          >
+            <InteractiveHoverButton
+              text={t.label}
+              className="top-nav__item"
+              data-active={isActive}
+              data-nav-id={t.id}
+              aria-current={isActive ? 'page' : undefined}
+              onClick={() => scrollToSection(t.id)}
+              showArrow={false}
+              style={buttonVars}
             />
-            <motion.nav
-              className="corner-nav__panel"
-              aria-label="Sections"
-              initial={{ opacity: 0, y: -12, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.97 }}
-              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-            >
-              {TABS.map((t, i) => (
-                <motion.button
-                  key={t.id}
-                  type="button"
-                  className="corner-nav__item"
-                  data-active={active === t.id}
-                  aria-current={active === t.id ? 'page' : undefined}
-                  onClick={() => goTo(t.id)}
-                  initial={{ opacity: 0, x: 26 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 * i, type: 'spring', stiffness: 320, damping: 26 }}
-                >
-                  <span
-                    className="corner-nav__dot"
-                    aria-hidden="true"
-                    style={{ background: TAB_TONES[t.id].bg }}
-                  />
-                  <span className="corner-nav__label">{t.label}</span>
-                  <span className="corner-nav__arrow" aria-hidden="true">→</span>
-                </motion.button>
-              ))}
-            </motion.nav>
-          </>
-        )}
-      </AnimatePresence>
-    </div>
+          </motion.div>
+        );
+      })}
+    </motion.nav>
   );
 }
 
@@ -294,22 +277,6 @@ function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 26, mass: 0.4 });
   return <motion.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />;
-}
-
-/** Name badge pinned inside the hero's top left corner — the menu
-    box's twin. It belongs to the landing page, so it scrolls away
-    with it instead of following. */
-function HeroName() {
-  return (
-    <motion.div
-      className="nk-hero__name"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.1, delay: 0.4, ease }}
-    >
-      <span className="nk-hero__name-main">Anvi Sidda</span>
-    </motion.div>
-  );
 }
 
 /* ---------------- hero (Frame 1, splits four ways on scroll) ---------------- */
@@ -350,10 +317,9 @@ function Hero() {
   return (
     <div className="nk-hero-wrap" ref={wrapRef}>
       <section className="nk-hero" id="hero">
-        <HeroName />
         <div className="f1">
           <motion.div
-            className="f1__pos f1__pos--anvis"
+            className="f1__pos f1__pos--name"
             style={{ x: anvisX, y: anvisY, rotate: anvisR, opacity: fade }}
           >
             <motion.span
@@ -362,7 +328,7 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.15, ease }}
             >
-              Anvi&rsquo;s
+              Anvi Sidda&rsquo;s
             </motion.span>
           </motion.div>
 
@@ -415,36 +381,34 @@ function Hero() {
               Portfolio
             </motion.span>
           </motion.div>
-        </div>
 
-        <motion.div
-          className="nk-hero__actions"
-          style={{ opacity: ctaOpacity }}
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.9, ease }}
-        >
-          <a className="pill pill--dark" href="#about">
-            See the work
-            <svg viewBox="0 0 41 21" aria-hidden="true" className="pill__arrow">
-              <path
-                d="M1.8 1.6 17.3 17.6a4.4 4.4 0 0 0 6.4 0L39 1.6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeMiterlimit="10"
+          <div className="nk-hero__actions-wrap">
+            <motion.div
+              className="nk-hero__actions"
+              style={{ opacity: ctaOpacity }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.9, ease }}
+            >
+              <InteractiveHoverLink
+                className="nk-hero__button"
+                href="#about"
+                text="Let's Go"
+                onClick={(event) => {
+                  event.preventDefault();
+                  scrollToSection('about');
+                }}
               />
-            </svg>
-          </a>
-          <a
-            className="pill pill--outline"
-            href={CONTACT.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Resume ↗
-          </a>
-        </motion.div>
+              <InteractiveHoverLink
+                className="nk-hero__button nk-hero__button--resume"
+                href={CONTACT.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                text="Résumé"
+              />
+            </motion.div>
+          </div>
+        </div>
       </section>
     </div>
   );
@@ -557,9 +521,12 @@ function ContactSection() {
                   <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
                 </p>
               )}
-              <button className="pill pill--dark nk-form__submit" type="submit" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Sending…' : 'Send it'}
-              </button>
+              <InteractiveHoverButton
+                className="nk-form__submit"
+                type="submit"
+                disabled={status === 'sending'}
+                text={status === 'sending' ? 'Sending…' : 'Send it'}
+              />
             </form>
           )}
         </Reveal>
@@ -602,7 +569,7 @@ export function Home() {
   return (
     <div className="nk-page">
       <ScrollProgress />
-      <CornerNav />
+      <TopNav />
       <main>
         <Hero />
         <SectionIntro
