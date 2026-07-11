@@ -29,3 +29,8 @@ public/dogs/IMG_1395 2.JPG
 *.njsproj
 *.sln
 *.sw?
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
