@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { MaskedReveal } from '../components/MaskedReveal';
-import { RealDogPair } from '../doodles/RealDogs';
-import { PROJECTS, type Project } from '../content';
+import { RisingWords } from '../components/RisingWords';
+import { WatercolorDogPair } from '../doodles/WatercolorDogs';
+import { PROJECTS, CONTACT, type Project } from '../content';
 
 /** A photo for each project so visitors can "click into" them. */
 const PROJECT_PHOTO: Record<string, string> = {
+  muse: '/photos/muse-cover.svg',
   riskradar: '/photos/risk-radar-cover.png',
   analytico: '/photos/analytico-cover.svg',
 };
 
 const PROJECT_PHOTO_CLASS: Record<string, string | undefined> = {
+  muse: 'trailstop__shot--logo',
   riskradar: 'trailstop__shot--risk',
   analytico: 'trailstop__shot--logo',
 };
@@ -35,13 +38,13 @@ export const Greeting: React.FC = () => (
       </h2>
       <Reveal delay={0.3}>
         <p className="greet__lede">
-          They&apos;ll lead the way down the path. A bit about me first, then
-          real projects to step into: the problem, the users, the decisions, and
-          what shipped.
+          They&apos;ll lead the way through the cabinet. A bit about me first,
+          then real case studies filed and ready to open: the problem, the
+          users, the decisions, and what shipped.
         </p>
       </Reveal>
       <Reveal delay={0.45} className="greet__dogs">
-        <RealDogPair style={{ width: 'min(420px, 70vw)', height: 'auto' }} />
+        <WatercolorDogPair style={{ width: 'min(420px, 70vw)' }} />
       </Reveal>
       <motion.span
         className="greet__scroll"
@@ -171,7 +174,7 @@ const ProjectModal: React.FC<{ p: Project; onClose: () => void }> = ({ p, onClos
         <p>{p.tradeoffs}</p>
       </section>
       <section>
-        <h4>Technical implementation</h4>
+        <h4>How it&apos;s built</h4>
         <p>{p.technical}</p>
         <div className="modal__stack">
           {p.stack.map((s) => <span className="modal__chip" key={s}>{s}</span>)}
@@ -186,10 +189,20 @@ const ProjectModal: React.FC<{ p: Project; onClose: () => void }> = ({ p, onClos
         <p>{p.next}</p>
       </section>
 
-      {p.link && (
-        <a className="modal__link link-pill" href={p.link.href} target="_blank" rel="noreferrer">
-          {p.link.label} ↗
-        </a>
+      {p.links && (
+        <div className="modal__links">
+          {p.links.map((l) => (
+            <a
+              key={l.href}
+              className="modal__link link-pill"
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {l.label} ↗
+            </a>
+          ))}
+        </div>
       )}
     </motion.div>
   </motion.div>
@@ -200,19 +213,40 @@ export const CaseStudies: React.FC = () => {
   const [active, setActive] = useState<Project | null>(null);
 
   return (
-    <section className="pathway walk-panel" id="case-studies" aria-label="Case studies along the path">
-      <div className="pathway__trail">
+    <section className="pathway walk-panel" id="work-detail" aria-label="Work along the path">
+      <div className="pathway__trail folder-panel" style={{ '--tab': 'var(--yale)' } as React.CSSProperties}>
+        <span className="folder-tab folder-tab--light" aria-hidden="true">02 · Work</span>
         <div className="pathway__spine" aria-hidden="true" />
+        {/* the dogs walk the trail too: golden up by Muse, poodle down by Analytico */}
+        <img
+          className="pathway__dog pathway__dog--top"
+          src="/dogs/felt-golden.png"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+        />
+        <img
+          className="pathway__dog pathway__dog--bottom"
+          src="/dogs/felt-poodle.png"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+        />
         <Reveal className="pathway__head" style={{ textAlign: 'center' }}>
-          <p className="eyebrow">Stops along the walk</p>
-          <h2><MaskedReveal>Case studies</MaskedReveal></h2>
+          <p className="eyebrow">Pulled from the drawer</p>
+          <h2><RisingWords text="My Projects and Case Studies" /></h2>
           <p className="lede lede--center">
-            Click a photo to step off the path and into the work: the problem,
-            the users, the decisions, and what shipped.
+            Click a photo to open the file: the problem, the users, the
+            decisions, and what shipped.
           </p>
         </Reveal>
 
         <div className="pathway__stops">
+          {/* dotted roadmap winding between the stops; sits behind the cards
+              and crosses the center only in the gaps between rows */}
+          <svg className="pathway__map" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M 30 6 C 92 16, 92 28, 70 40 C 52 50, 32 48, 30 60 C 28 74, 48 76, 66 86 C 76 92, 70 97, 55 98" />
+          </svg>
           {PROJECTS.map((p, i) => (
             <TrailStop key={p.id} p={p} index={i} onOpen={() => setActive(p)} />
           ))}
@@ -220,13 +254,14 @@ export const CaseStudies: React.FC = () => {
 
         <Reveal className="pathway__handoff" style={{ textAlign: 'center' }}>
           <span className="pathway__node-end" aria-hidden="true" />
-          <p className="eyebrow">The walk isn&apos;t over yet</p>
-          <h3>Further down the trail</h3>
-          <p className="lede lede--center">
-            Keep scrolling. The dogs have more to show you. Up next: where
-            I&apos;ve been, what I carry, and how to say hello.
-          </p>
-          <span className="pathway__scroll" aria-hidden="true">↓</span>
+          <a
+            className="link-pill"
+            href={CONTACT.linkedinProjects}
+            target="_blank"
+            rel="noreferrer"
+          >
+            More on LinkedIn ↗
+          </a>
         </Reveal>
       </div>
 

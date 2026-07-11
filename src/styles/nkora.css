@@ -1,0 +1,960 @@
+/* ============================================================
+   nkora.css — NKORA-inspired home page.
+   Palette (LOCKED, all six): cream #F0F0C9 · yale #124E78 ·
+   amber #F2BB05 · garnet #6E0E0A · spice #D74E09 · olive #5A5D1E
+   Font (LOCKED): Helvetica.
+   ============================================================ */
+
+.nk-page {
+  font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--garnet);
+  color: var(--cream);
+}
+
+.nk-page section { position: relative; overflow: hidden; }
+
+/* ---------------- display type ---------------- */
+
+.nk-display {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  margin: 0;
+}
+
+/* descender room (the y in "hello" was getting clipped by the mask) */
+.rising-word {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+.rising-letter { display: inline-block; will-change: transform; }
+
+/* ---------------- corner-flying section headers ---------------- */
+
+.corner-title { position: relative; }
+.corner-title h2 { will-change: transform, opacity; }
+
+/* ---------------- pills ---------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px 11px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+  cursor: pointer;
+}
+.pill:hover { transform: translateY(-2px); }
+
+.pill--cream { background: var(--cream); color: var(--garnet); }
+.pill--cream:hover { background: var(--amber); }
+.pill--dark { background: var(--garnet); color: var(--cream); }
+.pill--dark:hover { background: var(--spice); }
+.pill--amber { background: var(--amber); color: var(--garnet); }
+.pill--amber:hover { background: var(--cream); }
+.pill--outline { background: transparent; color: var(--garnet); border: 1px solid var(--garnet); }
+.pill--outline:hover { background: var(--garnet); color: var(--cream); }
+
+.pill__arrow { width: 22px; height: 12px; }
+
+/* ---------------- right-edge folder tab nav ---------------- */
+
+/* name pinned to the hero's top left corner (scrolls away with it) —
+   plain text, as tall as the menu button box */
+.nk-hero__name {
+  position: absolute;
+  top: 20px; /* top edge level with the menu button */
+  left: 26px;
+  z-index: 3;
+  color: var(--garnet);
+}
+.nk-hero__name-main {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.3; /* ≈ the menu button's 44px height */
+}
+
+/* the corner nav: a cream pill in the top-right corner that unfolds
+   into a paper panel of sections, one palette dot each */
+.corner-nav {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.corner-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px 12px 20px;
+  border-radius: 14px;
+  background: var(--garnet);
+  color: var(--cream);
+  /* hairline cream edge so the solid garnet square still reads on the
+     garnet WORK band */
+  border: 1.5px solid rgba(240, 240, 201, 0.85);
+  box-shadow: 0 12px 26px -14px rgba(51, 17, 10, 0.6);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.corner-nav__toggle:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--cream),
+    0 0 0 5px var(--garnet);
+}
+
+.corner-nav__icon {
+  display: inline-block;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  transform-origin: center;
+}
+
+/* invisible click-catcher so tapping anywhere closes the menu */
+.corner-nav__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.corner-nav__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+  min-width: 218px;
+  padding: 10px;
+  border-radius: 18px;
+  background: var(--cream-bright, #fafae3);
+  border: 1.5px solid rgba(110, 14, 10, 0.28);
+  box-shadow: 0 26px 48px -22px rgba(51, 17, 10, 0.55);
+  transform-origin: top right;
+}
+
+.corner-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 11px;
+  color: var(--ink, #33110a);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.corner-nav__item:hover { background: rgba(242, 187, 5, 0.22); }
+.corner-nav__item:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--garnet);
+}
+.corner-nav__item[data-active='true'] {
+  background: var(--garnet);
+  color: var(--cream);
+}
+
+.corner-nav__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(51, 17, 10, 0.3);
+  flex-shrink: 0;
+}
+.corner-nav__item[data-active='true'] .corner-nav__dot {
+  border-color: rgba(240, 240, 201, 0.7);
+}
+
+.corner-nav__label { flex: 1; }
+
+.corner-nav__arrow {
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.corner-nav__item:hover .corner-nav__arrow,
+.corner-nav__item[data-active='true'] .corner-nav__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---------------- hero (cream — Frame 1.svg composition) ----------------
+   Pinned for an extra viewport of scroll; Home.tsx flies the frame's
+   pieces off in different directions as you scroll into the site. */
+
+/* The About band starts rising the moment the user scrolls, sliding up over
+   the hero while the frame pieces fly out. */
+.nk-hero-wrap { height: 150vh; position: relative; margin-bottom: -50vh; }
+
+.nk-page section.nk-hero {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  padding: 40px 24px;
+  overflow: hidden;
+}
+
+.nk-hero__actions {
+  position: absolute;
+  bottom: 5vh;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.f1__pos { position: absolute; will-change: transform; }
+.f1__pos--anvis { left: 5.8%; top: 3.8%; }
+.f1__pos--portfolio { left: 52.16%; top: 79%; }
+.f1__pos--green { left: 5.82%; top: 24.03%; width: 41.59%; aspect-ratio: 193 / 191; }
+.f1__pos--amber { left: 52.16%; top: 9.54%; width: 41.59%; aspect-ratio: 193 / 191; }
+
+/* The frame: proportions and placements lifted from design/Frame 1.svg
+   (464×283 viewBox). Fonts scale with the frame via container units. */
+.f1 {
+  position: relative;
+  width: min(1000px, 100%, 145vh);
+  aspect-ratio: 464 / 283;
+  container-type: inline-size;
+  font-weight: 700;
+}
+
+.f1__anvis,
+.f1__portfolio {
+  display: block;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-size: 10.5cqw;
+}
+.f1__anvis { font-size: 9.4cqw; }
+
+.f1__anvis { color: var(--yale); }
+.f1__portfolio { color: var(--spice); }
+
+/* Pixel-exact crops of the embedded frame image — offsets/sizes come
+   straight from the SVG's pattern transforms. */
+.f1__square {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.f1__square img {
+  position: absolute;
+  max-width: none;
+  object-fit: fill;
+  user-select: none;
+}
+
+.f1__pos--green .f1__square img {
+  width: 280.292%;
+  height: 189.279%;
+  left: -23.9051%;
+  top: -44.1774%;
+}
+
+.f1__pos--amber .f1__square img {
+  width: 279.781%;
+  height: 188.78%;
+  left: -155.373%;
+  top: -44.2452%;
+}
+
+/* ---------------- legacy folder sections (case studies, experience) ----------------
+   The original folder-panel sections keep their own stylesheets
+   (pathway.css, stops.css, cabinet.css); this wrapper just resets the
+   NKORA page context so their cream-paper look reads correctly. */
+
+.nk-legacy {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.nk-legacy .walk-panel { min-height: 0; padding: 40px 0; }
+
+/* legacy folder panels float on colored bands so each section wears its own color */
+.nk-legacy { position: relative; }
+.nk-legacy--yale { background: var(--yale); }
+.nk-legacy--yale .cat-section { background: transparent; }
+.nk-legacy--olive { background: var(--olive); }
+.nk-legacy--olive .cat-section { background: transparent; }
+.nk-legacy--amber { background: var(--amber); }
+.nk-legacy--amber .cat-section { background: transparent; }
+
+/* the case-study trail's center spine ran straight through the copy;
+   the cards read better without it */
+.nk-legacy .pathway__spine,
+.nk-legacy .trailstop__node,
+.nk-legacy .pathway__node-end { display: none; }
+
+/* the dotted roadmap that winds between the case-study stops instead */
+.nk-legacy .pathway__stops { position: relative; }
+.nk-legacy .pathway__map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.nk-legacy .pathway__map path {
+  fill: none;
+  stroke: var(--garnet);
+  stroke-width: 2.4px;
+  stroke-dasharray: 2 12;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.35;
+}
+.nk-legacy .trailstop { position: relative; z-index: 1; }
+
+/* the dogs walking the work trail: golden by Muse, maltipoo by Analytico
+   (felt cutouts carry transparent padding, so they render a size up) */
+.pathway__dog {
+  position: absolute;
+  z-index: 2;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 14px 18px rgba(28, 20, 10, 0.24));
+}
+.pathway__dog--top {
+  width: clamp(230px, 28vw, 400px);
+  top: clamp(200px, 25vh, 340px);
+  right: 2%;
+  rotate: 4deg;
+}
+.pathway__dog--bottom {
+  width: clamp(280px, 33vw, 470px);
+  bottom: clamp(140px, 18vh, 260px);
+  right: 3%;
+  rotate: -3deg;
+}
+
+/* ---------------- spatial photo (About headshot) ---------------- */
+
+.spatial { perspective: 950px; }
+.spatial__card {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.spatial__card img { display: block; }
+.spatial__glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  border-radius: 2px;
+  transform: translateZ(40px);
+}
+
+/* ---------------- wave texture (very light background linework) ---------------- */
+
+.nk-texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  pointer-events: none;
+  overflow: hidden;
+}
+.nk-texture .wave-art {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------------- statement band (dark garnet) ---------------- */
+
+.nk-statement-band {
+  background: var(--garnet);
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px 24px;
+}
+
+.nk-statement-band__title {
+  color: var(--cream);
+  font-size: clamp(3rem, 9vw, 8rem);
+  text-align: center;
+  max-width: 12ch;
+}
+
+/* ---------------- about (olive green) ---------------- */
+
+.nk-about {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--olive);
+}
+
+.nk-about__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 64px 48px;
+}
+
+.nk-statement {
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.18;
+  color: var(--cream);
+  margin: 0;
+}
+
+.nk-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--cream);
+  max-width: 52ch;
+  margin: 0;
+}
+
+.nk-about__image { padding: 30px; }
+.nk-about__image > div { height: 100%; }
+.nk-about__image img {
+  width: 100%;
+  height: 100%;
+  min-height: 60vh;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+}
+
+/* ---------------- work (cream) ---------------- */
+
+.nk-work {
+  background: var(--cream);
+  color: var(--garnet);
+  padding: 96px 30px 48px;
+}
+
+.nk-work__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.nk-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.nk-card__cover {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.nk-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nk-card:hover .nk-card__cover img { transform: scale(1.04); }
+
+.nk-card__title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 6px 0 0;
+}
+.nk-card__tagline { font-size: 1rem; line-height: 1.5; margin: 0; }
+.nk-card__meta {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  opacity: 0.75;
+}
+
+.nk-card__metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 7px 12px 6px;
+  border: 1px solid var(--garnet);
+  border-radius: 999px;
+}
+
+.nk-work__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 72px;
+  flex-wrap: wrap;
+}
+
+.nk-work__heading { font-size: clamp(3rem, 8vw, 7rem); color: var(--garnet); }
+
+.nk-work__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* ---------------- dogs (white, per Frame 1 reference) ---------------- */
+
+.nk-dogs {
+  background: #ffffff;
+  padding: 88px 24px 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.nk-dogs__frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(24px, 8vw, 120px);
+  width: min(1100px, 100%);
+}
+
+.nk-dogs__half {
+  width: clamp(180px, 32vw, 420px);
+  height: auto;
+  display: block;
+  user-select: none;
+}
+
+.nk-dogs__caption {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--olive);
+  margin: 0;
+}
+
+/* ---------------- section intro pages (stacked words) ----------------
+   Editorial geometry: index number top-left, then one column on one
+   left alignment line — oversized title with the statement directly
+   beneath it, the whole block centered vertically on the page. Title
+   and statement always share the page's ink color. */
+
+.nk-human {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(24px, 4.5vh, 48px);
+  background: var(--spice);
+  padding: clamp(110px, 16vh, 180px) clamp(28px, 7vw, 96px) clamp(90px, 14vh, 160px);
+}
+
+.nk-human__words,
+.nk-human__text { min-width: 0; }
+
+/* small index tying the page to its folder tab (01 · About …) */
+.nk-intro__n {
+  position: absolute;
+  top: clamp(24px, 4.5vh, 48px);
+  left: clamp(28px, 7vw, 96px);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--cream);
+}
+.nk-intro__n::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 8px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.nk-statement { max-width: 38ch; }
+
+/* each intro page wears its own palette color; the ink (index, title,
+   statement) is one color per page */
+.nk-intro--amber { background: var(--amber); }
+.nk-intro--amber .nk-display--stack,
+.nk-intro--amber .nk-statement,
+.nk-intro--amber .nk-intro__n { color: var(--garnet); }
+
+.nk-intro--garnet { background: var(--garnet); }
+.nk-intro--garnet .nk-display--stack,
+.nk-intro--garnet .nk-statement,
+.nk-intro--garnet .nk-intro__n { color: var(--amber); }
+
+.nk-intro--spice { background: var(--spice); }
+
+.nk-intro--olive { background: var(--olive); }
+
+.nk-intro--yale { background: var(--yale); }
+.nk-intro--yale .nk-display--stack,
+.nk-intro--yale .nk-statement,
+.nk-intro--yale .nk-intro__n { color: var(--amber); }
+
+.nk-human__words { display: flex; flex-direction: column; gap: 10px; }
+
+.nk-display--stack {
+  font-size: clamp(2.9rem, 8.5vw, 8rem);
+  line-height: 0.88;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+/* ---------------- experience (yale blue) ---------------- */
+
+.nk-experience {
+  background: var(--yale);
+  color: var(--cream);
+  padding: 110px 30px 120px;
+}
+
+.nk-experience__heading {
+  font-size: clamp(2.6rem, 7vw, 6rem);
+  color: var(--amber);
+  margin-bottom: 64px;
+}
+
+.nk-experience__list { display: flex; flex-direction: column; }
+
+.nk-exp-row {
+  padding: 30px 0;
+  border-top: 1px solid rgba(240, 240, 201, 0.35);
+}
+
+.nk-exp-row__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
+  margin-bottom: 12px;
+}
+
+.nk-exp-row__head h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.nk-exp-row__role {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--amber);
+}
+
+.nk-exp-row__time {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: auto;
+  opacity: 0.8;
+}
+
+.nk-exp-row__blurb {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 80ch;
+  margin: 0;
+}
+
+/* ---------------- marquee band (dark garnet) ---------------- */
+
+.nk-marquee-band {
+  background: var(--garnet);
+  padding: 110px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+}
+
+.nk-marquee-band__lede { max-width: 26ch; }
+
+.wave-marquee {
+  width: 100%;
+  margin-top: 48px;
+  overflow: hidden;
+}
+
+.wave-marquee__train {
+  display: flex;
+  width: max-content;
+  animation: wave-scroll 42s linear infinite;
+}
+
+.wave-marquee__half { display: flex; }
+
+@keyframes wave-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.wave-panel {
+  width: clamp(180px, 22vw, 300px);
+  aspect-ratio: 300 / 420;
+  margin: 0 18px 56px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.wave-panel img,
+.wave-panel .wave-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------------- contact (cream, real form) ---------------- */
+
+.nk-contact {
+  background: var(--cream);
+  color: var(--garnet);
+  position: relative;
+  padding: 110px 24px 140px;
+}
+
+.nk-contact__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.nk-contact__heading {
+  font-size: clamp(3.4rem, 7.8vw, 7rem);
+  color: var(--ink);
+  margin-bottom: 22px;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.nk-contact__lede { color: var(--ink); max-width: 40ch; font-weight: 700; }
+
+/* the dogs sit together right under the contact copy */
+.nk-contact__dogs {
+  display: flex;
+  align-items: flex-end;
+  gap: 22px;
+  margin: 26px 0 18px;
+}
+.nk-contact__dogs img { height: auto; user-select: none; }
+.nk-contact__dogs img:first-child { width: min(150px, 34vw); }
+.nk-contact__dogs img:last-child { width: min(108px, 25vw); }
+
+.nk-contact__links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* cute little link buttons */
+.pill--mini {
+  padding: 9px 16px 8px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  background: var(--paper-shell);
+  color: var(--garnet);
+  border: 1.5px solid var(--garnet);
+}
+.pill--mini:hover { background: var(--amber); }
+
+/* the form itself — paper on the cream page */
+.nk-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--paper-shell);
+  border: 1px solid rgba(110, 14, 10, 0.28);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+}
+
+.nk-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--garnet);
+}
+
+.nk-form input,
+.nk-form textarea {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: #ffffff;
+  border: 1px solid rgba(110, 14, 10, 0.35);
+  border-radius: 10px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+.nk-form input:focus,
+.nk-form textarea:focus {
+  outline: 2px solid var(--amber);
+  border-color: var(--yale);
+}
+
+.nk-form__error {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--garnet);
+  background: rgba(215, 78, 9, 0.12);
+  border: 1px solid var(--spice);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.nk-form__error a { text-decoration: underline; font-weight: 700; }
+
+.nk-form__submit { align-self: flex-start; border: none; }
+.nk-form__submit:disabled { opacity: 0.6; cursor: default; }
+
+.nk-form--sent {
+  min-height: 320px;
+  align-items: center;
+  justify-content: center;
+}
+.nk-form__thanks {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 26ch;
+}
+
+/* ---------------- footer (olive green) ---------------- */
+
+.nk-footer {
+  background: var(--olive);
+  color: var(--cream);
+  padding: 64px 30px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+}
+
+.nk-footer__title { font-size: clamp(2.4rem, 7vw, 6rem); color: var(--cream); }
+
+.nk-footer__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.nk-footer__links { display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.nk-footer__links a {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.nk-footer__links a:hover { color: var(--amber); }
+
+.nk-footer__copy {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ---------------- responsive ---------------- */
+
+@media (max-width: 900px) {
+  .nk-hero__name { top: 12px; left: 14px; }
+  .nk-hero__name-main { font-size: 24px; }
+  .corner-nav { top: 12px; right: 14px; }
+  .corner-nav__toggle { padding: 10px 15px 9px 17px; font-size: 12px; }
+  .corner-nav__panel { min-width: 196px; }
+
+  .pathway__dog { width: clamp(96px, 16vw, 130px); }
+  .pathway__dog--top { right: 1%; }
+  .pathway__dog--bottom { right: 2%; }
+
+  .nk-hero { padding-top: 70px; }
+
+  .nk-contact { padding: 80px 20px 110px; }
+  .nk-contact__inner { grid-template-columns: 1fr; gap: 36px; }
+  .nk-contact__dogs img:first-child { width: 120px; }
+  .nk-contact__dogs img:last-child { width: 86px; }
+
+  .nk-about,
+  .nk-human { grid-template-columns: 1fr; min-height: 0; }
+  .nk-about__text { padding: 72px 24px 24px; }
+  .nk-about__image { padding: 24px; }
+  .nk-about__image img { min-height: 46vh; }
+
+  .nk-work { padding: 72px 20px 40px; }
+  .nk-work__cards { grid-template-columns: 1fr; gap: 48px; }
+  .nk-work__footer { flex-direction: column; align-items: flex-start; }
+  .nk-work__pills { justify-content: flex-start; }
+
+  .nk-dogs__frame { gap: 20px; }
+  .nk-dogs__half { width: 44vw; }
+
+  .nk-human { padding: 96px 24px 56px; gap: 20px; }
+  .nk-intro__n { top: 22px; left: 24px; }
+
+  .nk-experience { padding: 72px 20px 80px; }
+  .nk-exp-row__time { margin-left: 0; }
+
+  .nk-cta__links { flex-direction: column; gap: 18px; }
+}

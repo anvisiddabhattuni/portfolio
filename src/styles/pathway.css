@@ -78,7 +78,7 @@
   left: 50%;
   width: 0;
   transform: translateX(-50%);
-  border-left: 3px dashed rgba(133, 103, 66, 0.5);
+  border-left: 3px dashed rgba(110, 14, 10, 0.35);
   pointer-events: none;
 }
 .pathway__head {
@@ -245,8 +245,8 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--bark-deep);
-  box-shadow: 0 0 0 6px rgba(133, 103, 66, 0.18);
+  background: var(--spice);
+  box-shadow: 0 0 0 6px rgba(215, 78, 9, 0.2);
   margin-bottom: 24px;
 }
 .pathway__handoff h3 {
@@ -282,8 +282,8 @@
 }
 .cat-section--a { background: linear-gradient(180deg, var(--paper-shell) 0%, var(--paper-warm) 100%); }
 .cat-section--b { background: linear-gradient(180deg, var(--paper-warm) 0%, var(--paper-shell) 100%); }
-.cat-section--c { background: linear-gradient(180deg, var(--paper-shell) 0%, #ece1cf 100%); }
-.cat-section--d { background: linear-gradient(180deg, #ece1cf 0%, #e1d1b8 100%); }
+.cat-section--c { background: linear-gradient(180deg, var(--paper-shell) 0%, var(--cream-deep) 100%); }
+.cat-section--d { background: linear-gradient(180deg, var(--cream-deep) 0%, var(--paper-deep) 100%); }
 .cat-section__inner { width: 100%; max-width: 1120px; margin: 0 auto; }
 .cat-head { margin-bottom: clamp(28px, 5vh, 60px); }
 .cat-head h2 {
@@ -362,7 +362,7 @@
   background: var(--paper-warm);
   padding: 12px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 22px;
   box-shadow: 0 32px 58px -28px rgba(27, 20, 14, 0.5);
   rotate: 1.6deg;
 }
@@ -371,12 +371,19 @@
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: 1px;
+  border-radius: 14px;
   filter: saturate(0.96) contrast(1.02);
 }
 .about-edit__frame--headshot img {
   aspect-ratio: 4 / 5;
   object-position: 58% 28%;
+}
+/* the dogs' photo, framed round beneath the portrait (the photo is
+   natively 3:4, same as the frame default — no crop) */
+.about-edit__frame--dogpic {
+  width: 100%;
+  margin-top: clamp(26px, 4vh, 48px);
+  rotate: -1.4deg;
 }
 .about-edit__frame figcaption {
   margin-top: 10px;
@@ -387,12 +394,6 @@
   color: var(--ink-faint);
   text-align: center;
 }
-.about-edit__dogs {
-  width: min(280px, 68%);
-  margin: clamp(28px, 4vh, 52px) auto 0;
-  filter: drop-shadow(0 14px 18px rgba(28, 20, 10, 0.22));
-}
-.about-edit__dogs svg { display: block; width: 100%; height: auto; }
 
 @media (max-width: 860px) {
   .about-edit__grid { grid-template-columns: 1fr; gap: 34px; }
@@ -609,8 +610,8 @@
 }
 .modal__chip--tag {
   color: var(--ink);
-  border-color: rgba(124, 35, 51, 0.28);
-  background: rgba(124, 35, 51, 0.06);
+  border-color: rgba(110, 14, 10, 0.28);
+  background: rgba(242, 187, 5, 0.14);
 }
 .modal__decisions {
   list-style: none;
@@ -634,7 +635,8 @@
   border-radius: 50%;
   background: var(--wine);
 }
-.modal__link { display: inline-block; margin-top: 24px; }
+.modal__links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.modal__link { display: inline-block; }
 
 /* ---- trail-stop tag chips ---- */
 .trailstop__chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }

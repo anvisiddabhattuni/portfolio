@@ -27,7 +27,7 @@ export const Reveal: React.FC<{
       style={style}
       initial={reduced ? { opacity: 0 } : { opacity: 0, y }}
       animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y }}
-      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

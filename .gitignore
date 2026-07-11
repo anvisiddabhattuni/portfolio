@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
+
+# Raw camera originals — the site uses the resized, EXIF-stripped web
+# copies; the originals are large and can carry GPS metadata
+public/dogs/IMG_1395 2.JPG
 
 # Editor directories and files
 .vscode/*

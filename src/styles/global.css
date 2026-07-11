@@ -1,42 +1,76 @@
+/* ============================================================
+   Global palette — the six (LOCKED, see CLAUDE.md + design/design.md):
+   Cream #F0F0C9 · Yale Blue #124E78 · Amber Gold #F2BB05
+   Dark Garnet #6E0E0A · Spicy Orange #D74E09 · Olive Green #5A5D1E
+   Every legacy variable below is remapped onto these six so the
+   whole site wears the scheme.
+   ============================================================ */
 :root {
-  /* ---- Ink: a warm near-black through to a soft greige ---- */
-  --ink: #1b1916;
-  --ink-soft: #44403a;
-  --ink-faint: #757067;
-  --ink-ghost: #a7a196;
-  /* ---- Paper: warm off-whites and greiges (no blue) ---- */
-  --paper: #ece8e0;
-  --paper-warm: #e2ddd2;
-  --paper-deep: #d3cdc0;
-  --paper-shell: #f3f0ea;
-  /* ---- Neutrals repurposed from the old "leaf/sky" slots ---- */
-  --leaf: #8d857780;
-  --leaf-deep: #5d564b;
-  --leaf-light: #b3ab9c;
-  --sky: #d8d3ca;
-  --sky-soft: #eae6df;
-  /* ---- Burgundy: the single sharp accent ---- */
-  --wine: #7c2333;
-  --wine-deep: #5c1824;
-  --wine-soft: #a8505c;
-  --bloom: #7c2333;
-  --bloom-soft: #a8505c;
-  /* ---- Warm taupes for trail markers + interior light ---- */
-  --sun: #c2a06a;
-  --sun-soft: #e0c79a;
-  --bark: #9a866c;
-  --bark-deep: #7a6750;
+  /* ---- The six, verbatim ---- */
+  --cream: #f0f0c9;
+  --yale: #124e78;
+  --amber: #f2bb05;
+  --garnet: #6e0e0a;
+  --spice: #d74e09;
+  --olive: #5a5d1e;
+
+  /* ---- Tints & shades derived from the five ---- */
+  --cream-bright: #fafae3;
+  --cream-deep: #e4e3af;
+  --cream-shadow: #d3d195;
+  --yale-deep: #0c3a5b;
+  --yale-soft: #4e7fa4;
+  --yale-tint: #d9e5ee;
+  --amber-deep: #c79a02;
+  --amber-soft: #f8d96a;
+  --garnet-deep: #4a0906;
+  --spice-soft: #efa06e;
+
+  /* ---- Ink: garnet-black for text ---- */
+  --ink: #33110a;
+  --ink-soft: #5c2a1c;
+  --ink-faint: #82503c;
+  --ink-ghost: #a97f63;
+
+  /* ---- Paper: cream everywhere ---- */
+  --paper: var(--cream);
+  --paper-warm: #e9e8bc;
+  --paper-deep: #ddda9f;
+  --paper-shell: #f7f6dc;
+
+  /* ---- Legacy "leaf/sky" slots → yale blue family ---- */
+  --leaf: #124e7880;
+  --leaf-deep: var(--yale-deep);
+  --leaf-light: #9dbbd0;
+  --sky: #c4d8e5;
+  --sky-soft: #e2ebf1;
+
+  /* ---- Legacy "wine" accent → dark garnet (+ spicy orange hover) ---- */
+  --wine: var(--garnet);
+  --wine-deep: var(--garnet-deep);
+  --wine-soft: var(--spice);
+  --bloom: var(--garnet);
+  --bloom-soft: var(--spice-soft);
+
+  /* ---- Legacy "sun" slots → amber gold ---- */
+  --sun: var(--amber);
+  --sun-soft: var(--amber-soft);
+  --bark: #a2701b;
+  --bark-deep: #7a4e12;
+
   /* ---- Shadows + rules ---- */
-  --surface-shadow: 0 26px 60px -28px rgba(27, 25, 22, 0.45);
-  --card-shadow: 0 12px 26px -16px rgba(27, 25, 22, 0.4);
-  --line: rgba(27, 25, 22, 0.14);
-  /* ---- Crisp, editorial radii (kept deliberately small) ---- */
-  --radius: 3px;
-  --radius-lg: 4px;
-  --pill: 3px;
-  /* ---- Type: Helvetica throughout — display and body share one voice ---- */
-  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --surface-shadow: 0 26px 60px -28px rgba(51, 17, 10, 0.45);
+  --card-shadow: 0 12px 26px -16px rgba(51, 17, 10, 0.4);
+  --line: rgba(110, 14, 10, 0.18);
+
+  /* ---- Radii: a touch rounder, folders and tabs like it ---- */
+  --radius: 6px;
+  --radius-lg: 12px;
+  --pill: 999px;
+
+  /* ---- Type: Helvetica only (LOCKED, see CLAUDE.md) ---- */
+  --font-serif: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: Helvetica, 'Helvetica Neue', Arial, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,20 +78,22 @@
 html, body, #root {
   width: 100%;
   background:
-    radial-gradient(120% 90% at 50% -10%, #f5f2ec 0%, transparent 55%),
-    linear-gradient(180deg, #f1ede6 0%, #e6e0d6 100%);
+    radial-gradient(120% 90% at 50% -10%, var(--cream-bright) 0%, transparent 55%),
+    linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
   color: var(--ink);
   font-family: var(--font-sans);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* clip, not hidden — hidden would create a scroll container and
+     break the hero's position: sticky pinning */
+  overflow-x: clip;
 }
 
 body {
   background-image:
-    radial-gradient(circle at 50% 50%, rgba(27,25,22,0.025) 0.5px, transparent 0.5px),
-    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0));
+    radial-gradient(circle at 50% 50%, rgba(110, 14, 10, 0.03) 0.5px, transparent 0.5px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
   background-size: 5px 5px, auto;
 }
 
@@ -66,7 +102,7 @@ h1, h2, h3 {
   font-optical-sizing: auto;
 }
 
-::selection { background: var(--wine); color: var(--paper-shell); }
+::selection { background: var(--amber); color: var(--garnet); }
 
 .paper-grain::before {
   content: '';

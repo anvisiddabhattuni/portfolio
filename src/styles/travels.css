@@ -147,7 +147,7 @@ button.polaroid { cursor: pointer; }
   inset: 0;
   background:
     linear-gradient(140deg, rgba(154, 134, 108, 0.3), rgba(27, 25, 22, 0.32)),
-    linear-gradient(10deg, rgba(124, 35, 51, 0.16), rgba(45, 42, 38, 0.18));
+    linear-gradient(10deg, rgba(110, 14, 10, 0.16), rgba(45, 42, 38, 0.18));
   mix-blend-mode: color;
   opacity: 0.78;
   transition: opacity 0.35s ease;

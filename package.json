@@ -11,10 +11,9 @@
   },
   "dependencies": {
     "framer-motion": "^12.40.0",
-    "hyperframes": "^0.6.81",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "remotion": "^4.0.473"
+    "resend": "^6.17.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { MaskedReveal } from '../components/MaskedReveal';
-import { RealDogPair } from '../doodles/RealDogs';
+import { RisingWords } from '../components/RisingWords';
+import { WatercolorDogPair } from '../doodles/WatercolorDogs';
 import { ABOUT, EXPERIENCES, SKILLS, CONTACT, type Experience } from '../content';
 import { HEADSHOT } from '../photos';
 
 /* ---------------- STOP 1: ABOUT (editorial) ---------------- */
 export const AboutStop: React.FC = () => (
-  <section className="cat-section cat-section--a walk-panel" id="about" aria-label="About Anvi">
-    <div className="cat-section__inner">
+  <section className="cat-section cat-section--a walk-panel" id="about-detail" aria-label="About Anvi">
+    <div className="cat-section__inner folder-panel" style={{ '--tab': 'var(--amber)' } as React.CSSProperties}>
+      <span className="folder-tab" aria-hidden="true">01 · About</span>
       <Reveal className="cat-head">
-        <p className="eyebrow">A little about me</p>
-        <h2><MaskedReveal>About</MaskedReveal></h2>
+        <h2><RisingWords text="Hi there!" /></h2>
       </Reveal>
 
       <div className="about-edit__grid">
@@ -43,12 +44,13 @@ export const AboutStop: React.FC = () => (
 
         <Reveal delay={0.1} className="about-edit__media">
           <figure className="about-edit__frame about-edit__frame--headshot">
-            <img src={HEADSHOT.src} alt={`${HEADSHOT.caption}, ${HEADSHOT.place}`} loading="lazy" />
-            <figcaption>{HEADSHOT.caption}, {HEADSHOT.place}</figcaption>
+            <img src={HEADSHOT.src} alt={HEADSHOT.caption} loading="lazy" />
+            <figcaption>{HEADSHOT.caption}</figcaption>
           </figure>
-          <div className="about-edit__dogs" aria-hidden="true">
-            <RealDogPair style={{ width: '100%', height: 'auto' }} />
-          </div>
+          <figure className="about-edit__frame about-edit__frame--dogpic">
+            <img src="/dogs/dogs-photo.jpg" alt="Anvi's two dogs" loading="lazy" />
+            <figcaption>The tour guides</figcaption>
+          </figure>
         </Reveal>
       </div>
     </div>
@@ -59,11 +61,12 @@ export const AboutStop: React.FC = () => (
 export const ExperienceStop: React.FC = () => {
   const [active, setActive] = useState<Experience | null>(null);
   return (
-    <section className="cat-section cat-section--b walk-panel" id="experience" aria-label="Experience">
-      <div className="cat-section__inner">
+    <section className="cat-section cat-section--b walk-panel" id="experience-list" aria-label="Experience details">
+      <div className="cat-section__inner folder-panel" style={{ '--tab': 'var(--spice)' } as React.CSSProperties}>
+        <span className="folder-tab folder-tab--light" aria-hidden="true">03 · Experience</span>
         <Reveal className="cat-head">
-          <p className="eyebrow">Further down the trail</p>
-          <h2><MaskedReveal>Experience</MaskedReveal></h2>
+          <p className="eyebrow">Where the work happened</p>
+          <h2><RisingWords text="My Experience" /></h2>
           <p className="cat-head__lede">
             The teams, programs, and communities where the work shipped. Open any entry for the details.
           </p>
@@ -126,11 +129,12 @@ export const ExperienceStop: React.FC = () => {
 
 /* ---------------- STOP 3: SKILLS (grouped set) ---------------- */
 export const SkillsStop: React.FC = () => (
-  <section className="cat-section cat-section--c walk-panel" id="skills" aria-label="Skills">
-    <div className="cat-section__inner">
+  <section className="cat-section cat-section--c walk-panel" id="skills-detail" aria-label="Skills">
+    <div className="cat-section__inner folder-panel" style={{ '--tab': 'var(--garnet)' } as React.CSSProperties}>
+      <span className="folder-tab folder-tab--light" aria-hidden="true">04 · Skills</span>
       <Reveal className="cat-head">
         <p className="eyebrow">What I carry on the walk</p>
-        <h2><MaskedReveal>Skills</MaskedReveal></h2>
+        <h2><RisingWords text="Skills" /></h2>
         <p className="cat-head__lede">What&apos;s in the bag for this walk, grouped by how the work actually gets done.</p>
       </Reveal>
 
@@ -155,22 +159,39 @@ export const SkillsStop: React.FC = () => (
 
 /* ---------------- STOP 4: CONTACT (editorial) ---------------- */
 export const ContactStop: React.FC = () => {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const [form, setForm] = useState({ name: '', email: '', msg: '' });
   const [error, setError] = useState('');
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (!form.name.trim() || !form.email.trim() || !form.msg.trim()) {
       setError('Add your name, email, and a short message before sending.');
       return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError('That email doesn’t look right. Mind double-checking it?');
+      return;
+    }
     setError('');
-    setSent(true);
+    setStatus('sending');
+    try {
+      const res = await fetch(CONTACT.formEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.msg }),
+      });
+      if (!res.ok) throw new Error(`form endpoint returned ${res.status}`);
+      setStatus('sent');
+    } catch {
+      setStatus('idle');
+      setError(`That didn’t send. Email me directly instead: ${CONTACT.email}`);
+    }
   };
 
   return (
     <section className="cat-section cat-section--d walk-panel" id="contact" aria-label="Contact">
-      <div className="cat-section__inner">
+      <div className="cat-section__inner folder-panel" style={{ '--tab': 'var(--amber)' } as React.CSSProperties}>
+        <span className="folder-tab" aria-hidden="true">05 · Contact</span>
         <Reveal className="cat-head">
           <p className="eyebrow">The end of the path</p>
           <h2><MaskedReveal>Say hello</MaskedReveal></h2>
@@ -190,38 +211,51 @@ export const ContactStop: React.FC = () => {
               <a className="link-pill" href={CONTACT.resume} target="_blank" rel="noreferrer">Resume ↗</a>
             </div>
             <div className="contact-edit__dogs" aria-hidden="true">
-              <RealDogPair style={{ width: '100%', height: 'auto' }} />
+              <WatercolorDogPair style={{ width: '100%' }} />
             </div>
           </Reveal>
 
           <Reveal delay={0.1} className="contact-edit__form">
-            {!sent ? (
-              <div className="mail-form">
+            <div className="envelope">
+              <span className="envelope__seal" aria-hidden="true">🐾</span>
+              {status !== 'sent' ? (
+                <div className="mail-form">
                 <input
                   placeholder="Your name"
+                  aria-label="Your name"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                 />
                 <input
                   placeholder="Your email"
+                  aria-label="Your email"
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                 />
                 <textarea
                   placeholder="Write a note…"
+                  aria-label="Your message"
                   rows={5}
                   value={form.msg}
                   onChange={(e) => setForm({ ...form, msg: e.target.value })}
                 />
-                {error ? <p className="form-error">{error}</p> : null}
-                <button className="btn-ink" type="button" onClick={submitForm}>Send it off</button>
-              </div>
-            ) : (
-              <motion.p className="thanks" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                Message staged. Hook this button to Formspree, Resend, or your own endpoint to make it live.
-              </motion.p>
-            )}
+                  {error ? <p className="form-error" role="alert">{error}</p> : null}
+                  <button
+                    className="btn-ink"
+                    type="button"
+                    onClick={submitForm}
+                    disabled={status === 'sending'}
+                  >
+                    {status === 'sending' ? 'Sending…' : 'Send it off'}
+                  </button>
+                </div>
+              ) : (
+                <motion.p className="thanks" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  Sent! Thanks for the note, {form.name.split(' ')[0]}. I&apos;ll write back soon.
+                </motion.p>
+              )}
+            </div>
           </Reveal>
         </div>
       </div>

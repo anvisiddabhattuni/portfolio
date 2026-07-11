@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const STOPS = [
   { id: 'about', label: 'About' },
-  { id: 'case-studies', label: 'Case studies' },
+  { id: 'case-studies', label: 'Work' },
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },

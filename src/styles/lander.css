@@ -1,12 +1,8 @@
 /* ============================================================
-   Door scene — the front page.
-   A quiet, vintage first impression: the name in a tall serif,
-   the two dogs waiting in front of a heavy wooden door, and one
-   button to enter. Everything "drops" away on enter.
+   Opening scene — cream stage, two crayon dog squares dancing.
+   On enter the squares split to opposite edges of the screen.
    ============================================================ */
 .door-scene {
-  --paper-vintage: var(--paper-warm);
-  --ink-vintage: var(--ink);
   --rule: var(--line);
   --muted: var(--ink-faint);
   position: relative;
@@ -15,8 +11,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: var(--paper-vintage);
-  color: var(--ink-vintage);
+  background: var(--cream);
+  color: var(--ink);
 }
 
 .door-scene__paper {
@@ -25,14 +21,14 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(120% 80% at 50% 0%, rgba(255, 251, 242, 0.7), transparent 60%),
-    radial-gradient(100% 90% at 50% 120%, rgba(120, 92, 50, 0.16), transparent 60%);
-  opacity: 0.9;
+    radial-gradient(120% 80% at 50% 0%, rgba(250, 250, 227, 0.9), transparent 60%),
+    radial-gradient(60% 50% at 18% 78%, rgba(242, 187, 5, 0.14), transparent 70%),
+    radial-gradient(60% 50% at 82% 78%, rgba(18, 78, 120, 0.12), transparent 70%),
+    radial-gradient(100% 90% at 50% 120%, rgba(110, 14, 10, 0.1), transparent 60%);
 }
 
-/* ---- top + bottom hairline bars ---- */
-.door-scene__bar,
-.door-scene__foot {
+/* ---- top hairline bar ---- */
+.door-scene__bar {
   position: relative;
   z-index: 3;
   display: flex;
@@ -41,23 +37,24 @@
   gap: 16px;
   padding: 20px clamp(20px, 5vw, 60px);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-}
-.door-scene__bar { border-bottom: 1px solid var(--rule); }
-.door-scene__foot {
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
-  justify-content: center;
+  border-bottom: 1.5px solid var(--rule);
 }
 .door-scene__bar-end { color: var(--muted); margin-left: auto; }
+.door-scene__bar-end a {
+  font-weight: 700;
+  text-decoration: none;
+}
+.door-scene__bar-end a:hover { color: var(--spice); text-decoration: underline; }
 .door-scene__brand {
   font-family: var(--font-serif);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--garnet);
 }
 
 /* ---- center stage ---- */
@@ -69,137 +66,93 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(4px, 0.9vh, 12px);
+  gap: clamp(6px, 1.2vh, 16px);
   padding: clamp(14px, 2.6vh, 34px) clamp(20px, 5vw, 60px) clamp(18px, 3vh, 40px);
   text-align: center;
 }
-.door-scene__eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
 .door-scene__title {
   font-family: var(--font-serif);
-  font-weight: 700;
-  font-size: clamp(36px, 6.8vw, 96px);
-  line-height: 0.92;
-  letter-spacing: -0.05em;
+  font-weight: 800;
+  font-size: clamp(38px, 6.6vw, 92px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  color: var(--garnet);
   padding-bottom: 0.08em;
 }
-.door-scene__title em {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--ink-soft);
-}
-.door-scene__title .mask-reveal { line-height: 1; padding: 0 0.04em; }
+.door-scene__title .mask-reveal { line-height: 1.04; padding: 0 0.04em; }
 .door-scene__title-sub {
   display: block;
-  margin-top: clamp(6px, 1vh, 12px);
+  margin-top: clamp(8px, 1.2vh, 14px);
   font-family: var(--font-sans);
-  font-size: clamp(13px, 1.4vw, 17px);
-  font-weight: 700;
-  letter-spacing: 0.42em;
+  font-size: clamp(12px, 1.35vw, 16px);
+  font-weight: 800;
+  letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: var(--wine);
-  line-height: 1.1;
+  color: var(--yale);
+  line-height: 1.2;
 }
 
-/* ---- the positioning line: the one sentence a recruiter remembers ---- */
+/* ---- the positioning line ---- */
 .door-scene__positioning {
-  max-width: 42ch;
-  margin: clamp(10px, 1.6vh, 18px) auto 0;
+  max-width: 46ch;
+  margin: clamp(8px, 1.4vh, 16px) auto 0;
   font-size: clamp(14px, 1.55vw, 18px);
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--ink-soft);
-  letter-spacing: -0.005em;
 }
-.door-scene__positioning strong { color: var(--ink); font-weight: 700; }
+.door-scene__positioning strong { color: var(--garnet); font-weight: 800; }
 
-/* ---- the doorway: photo door + dogs in front, sized off viewport height
-        so the name above it always stays in frame ---- */
-.door-scene__doorway {
+/* ---- the dancing squares ---- */
+.door-scene__squares {
   position: relative;
-  margin-top: clamp(8px, 1.8vh, 20px);
+  margin-top: clamp(14px, 3vh, 34px);
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: clamp(24px, 5vw, 72px);
 }
-/* a soft floor so the whole scene sits on the page instead of floating */
-.door-scene__floor {
-  position: absolute;
-  left: 50%;
-  bottom: -7%;
-  width: 230%;
-  height: clamp(60px, 9vh, 110px);
-  transform: translateX(-50%);
-  background: radial-gradient(52% 58% at 50% 0%, rgba(20, 14, 8, 0.2), transparent 72%);
-  filter: blur(10px);
-  pointer-events: none;
-  z-index: 0;
-}
-.door-scene__door-shadow {
-  position: absolute;
-  left: 50%;
-  top: 4%;
-  width: 120%;
-  height: 99%;
-  transform: translateX(-48%) skewX(-3deg);
-  background:
-    radial-gradient(60% 70% at 60% 40%, rgba(20, 14, 8, 0.4), transparent 72%),
-    linear-gradient(180deg, rgba(20, 14, 8, 0.32), rgba(20, 14, 8, 0.1) 70%, transparent);
-  filter: blur(26px);
-  border-radius: 4px;
-  pointer-events: none;
-  z-index: 0;
-}
-.door-scene__door {
+.door-scene__square {
   position: relative;
-  z-index: 1;
-  height: clamp(300px, 47vh, 540px);
-  aspect-ratio: 414 / 936;
-  border-radius: var(--radius) var(--radius) 0 0;
-  overflow: hidden;
-  box-shadow:
-    0 1px 0 rgba(255, 250, 240, 0.45),
-    0 30px 60px -26px rgba(20, 14, 8, 0.65),
-    inset 0 0 60px rgba(0, 0, 0, 0.35);
+  width: clamp(160px, 24vh, 280px);
+  will-change: transform;
 }
-.door-scene__door img {
+.door-scene__square svg,
+.door-scene__dog {
+  display: block;
+  filter: drop-shadow(0 18px 26px rgba(51, 17, 10, 0.28));
+}
+.door-scene__dog {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  filter: saturate(0.92) contrast(1.02) brightness(0.96);
+  height: auto;
+  user-select: none;
+  /* the artwork has real alpha — its soft glow composites onto the cream */
 }
-.door-scene__door-glow {
+.door-scene__square--gold svg {
+  filter: drop-shadow(0 18px 30px rgba(242, 187, 5, 0.45))
+    drop-shadow(0 10px 16px rgba(51, 17, 10, 0.2));
+}
+.door-scene__square--blue svg {
+  filter: drop-shadow(0 18px 30px rgba(18, 78, 120, 0.4))
+    drop-shadow(0 10px 16px rgba(51, 17, 10, 0.2));
+}
+.door-scene__square-shadow {
   position: absolute;
   left: 50%;
-  bottom: -2%;
-  width: 150%;
-  height: 60%;
+  bottom: -13%;
+  width: 76%;
+  height: 16px;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, rgba(244, 217, 166, 0.55), transparent 72%);
-  mix-blend-mode: screen;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(51, 17, 10, 0.24), transparent 74%);
+  filter: blur(4px);
   pointer-events: none;
 }
-/* the dogs stand on the threshold, IN FRONT of the door */
-.door-scene__dogs {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: -6%;
-  width: 152%;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 16px 18px rgba(28, 20, 10, 0.28));
-}
-.door-scene__dogs svg { display: block; width: 100%; height: auto; }
 
 /* ---- calls to action ---- */
 .door-scene__actions {
   position: relative;
   z-index: 4;
-  margin-top: clamp(40px, 7vh, 88px);
+  margin-top: clamp(28px, 5vh, 60px);
   display: flex;
   align-items: center;
   gap: 16px;
@@ -208,17 +161,16 @@
 }
 .door-scene__resume {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-soft);
   padding: 15px 8px;
-  border-bottom: 1px solid transparent;
+  border-bottom: 2px solid transparent;
   transition: color 0.25s ease, border-color 0.25s ease;
 }
-.door-scene__resume:hover { color: var(--wine); border-color: var(--wine); }
+.door-scene__resume:hover { color: var(--spice); border-color: var(--spice); }
 
-/* ---- enter button ---- */
 .door-scene__enter {
   position: relative;
   z-index: 4;
@@ -226,53 +178,41 @@
   align-items: center;
   gap: 12px;
   padding: 16px 30px;
-  background: var(--ink);
-  color: var(--paper-shell);
+  background: var(--garnet);
+  color: var(--cream);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   border-radius: var(--pill);
   transition: gap 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  box-shadow: 0 14px 26px -16px rgba(20, 14, 8, 0.8);
+  box-shadow: 0 14px 26px -14px rgba(110, 14, 10, 0.7);
 }
 .door-scene__enter:hover {
   gap: 18px;
   transform: translateY(-2px);
-  background: var(--wine);
-  box-shadow: 0 20px 34px -16px rgba(92, 24, 36, 0.55);
+  background: var(--spice);
+  box-shadow: 0 20px 34px -16px rgba(215, 78, 9, 0.6);
 }
-.door-scene__enter-arrow {
-  font-size: 15px;
-  transition: transform 0.3s ease;
-}
-.door-scene__enter:hover .door-scene__enter-arrow { transform: translateY(3px); }
+.door-scene__enter-arrow { font-size: 15px; transition: transform 0.3s ease; }
+.door-scene__enter:hover .door-scene__enter-arrow { transform: translateX(4px); }
 
-/* narrow screens: tighten the bar + footer, ease the door scale */
+/* narrow screens */
 @media (max-width: 720px) {
   .door-scene__bar { padding: 16px 20px; }
-  .door-scene__foot {
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    gap: 8px;
-    flex-direction: column;
-    text-align: center;
-  }
-  .door-scene__title { font-size: clamp(40px, 13vw, 76px); }
-  .door-scene__door { height: clamp(280px, 40vh, 420px); }
+  .door-scene__title { font-size: clamp(34px, 11vw, 64px); }
   .door-scene__positioning { font-size: clamp(13px, 3.6vw, 16px); }
-  .door-scene__actions { margin-top: clamp(36px, 6vh, 64px); }
+  .door-scene__square { width: clamp(120px, 34vw, 200px); }
+  .door-scene__actions { margin-top: clamp(24px, 4.5vh, 48px); }
 }
 
-/* short viewports (landscape laptops, small heights): keep it all in frame */
+/* short viewports: keep everything in frame */
 @media (max-height: 760px) {
-  .door-scene__title { font-size: clamp(38px, 6vw, 72px); }
-  .door-scene__door { height: clamp(240px, 42vh, 400px); }
-  .door-scene__positioning { font-size: clamp(13px, 1.4vw, 16px); }
+  .door-scene__title { font-size: clamp(34px, 5.6vw, 68px); }
+  .door-scene__square { width: clamp(130px, 22vh, 220px); }
 }
-
 @media (max-height: 600px) {
-  .door-scene__title { font-size: clamp(32px, 5vw, 56px); }
-  .door-scene__door { height: clamp(190px, 40vh, 320px); }
-  .door-scene__actions { margin-top: clamp(28px, 5vh, 52px); }
+  .door-scene__title { font-size: clamp(30px, 5vw, 52px); }
+  .door-scene__square { width: clamp(110px, 20vh, 170px); }
+  .door-scene__actions { margin-top: clamp(20px, 4vh, 40px); }
 }

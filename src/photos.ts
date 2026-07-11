@@ -24,7 +24,7 @@ export const DOG_PHOTOS: Photo[] = [
 export const SAND_PHOTO: Photo = p('hi-anvi-sand.png', 'hi Anvi', 'Somewhere with a beach', 'portrait');
 
 /** Headshot for the About section. */
-export const HEADSHOT: Photo = p('anvi-headshot.png', 'Anvi Siddabhattuni', 'Banff, Canada', 'landscape');
+export const HEADSHOT: Photo = p('ANVIHEADSHOT.jpg', 'Anvi Siddabhattuni', 'portrait', 'portrait');
 
 /** Everywhere the walk has wandered. */
 export const TRAVEL_PHOTOS: Photo[] = [

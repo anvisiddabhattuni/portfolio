@@ -54,9 +54,9 @@ Everything lives in **`src/content.ts`** — edit this one file and the whole wa
 - **Resume:** set `CONTACT.resume` to a real PDF path (e.g. `/resume.pdf` in `/public`).
 - **Project screenshots:** in the project modal, the `.shot` placeholder is where real
   screenshots go — swap in `<img>` tags.
-- **Contact form:** the form currently just animates success. To actually send mail, wire
-  the "Send it off" button to a service like Formspree, Resend, or your own endpoint
-  (see `ContactStop` in `src/sections/Stops.tsx`).
+- **Contact form:** submissions post to `/api/contact`, which sends through Resend. Set
+  `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `CONTACT_TO_EMAIL` in your deployment
+  environment. See `.env.example` for the expected names.
 
 ---
 

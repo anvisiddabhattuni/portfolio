@@ -1,0 +1,262 @@
+/* ============================================================
+   The filing cabinet:
+   - .folder-dock   : bottom dock of magnifying manila folders
+   - .folder-panel  : each section framed as an open file folder
+   - .envelope      : the contact form dressed as a letter
+   - .scroll-progress : amber→spice bar tracking the walk
+   ============================================================ */
+
+/* ---------------- scroll progress ---------------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 90;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--amber), var(--spice), var(--garnet));
+  pointer-events: none;
+}
+
+/* ---------------- folder dock ---------------- */
+.folder-dock {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40; /* below the modal scrim (50) so open files cover the drawer */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.folder-dock__panel {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 10px 16px 12px;
+  border-radius: 16px;
+  background: rgba(247, 246, 220, 0.88);
+  border: 1.5px solid rgba(110, 14, 10, 0.22);
+  box-shadow:
+    0 18px 38px -18px rgba(51, 17, 10, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+/* the drawer rail underneath — a little cabinet handle */
+.folder-dock__drawer {
+  width: 64px;
+  height: 5px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: rgba(110, 14, 10, 0.35);
+}
+.folder-dock__item {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  aspect-ratio: 48 / 44;
+  padding: 0;
+  will-change: width;
+}
+.folder-dock__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 5px 8px rgba(51, 17, 10, 0.3));
+}
+/* folder cracks open: paper rises, front tips forward */
+.folder-dock__paper {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.folder-dock__front {
+  transform-origin: 24px 37px;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.folder-dock__item:hover .folder-dock__paper,
+.folder-dock__item:focus-visible .folder-dock__paper {
+  transform: translateY(-4.5px);
+}
+.folder-dock__item:hover .folder-dock__front,
+.folder-dock__item:focus-visible .folder-dock__front {
+  transform: scaleY(0.88);
+}
+.folder-dock__label {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  white-space: nowrap;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: var(--garnet);
+  color: var(--cream);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 18px -8px rgba(74, 9, 6, 0.7);
+  pointer-events: none;
+}
+/* the section you're on: a little amber pin dot under the folder */
+.folder-dock__dot {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--spice);
+  transition: transform 0.25s ease;
+}
+.folder-dock__item[data-active='true'] .folder-dock__dot {
+  transform: translateX(-50%) scale(1);
+}
+
+@media (max-width: 720px) {
+  .folder-dock { bottom: 10px; }
+  .folder-dock__panel { gap: 6px; padding: 8px 10px 9px; }
+}
+
+/* ---------------- folder panels: sections as open files ---------------- */
+.folder-panel {
+  --tab: var(--amber);
+  --tab-ink: var(--garnet);
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 120px),
+    var(--cream-bright);
+  border: 1.5px solid rgba(110, 14, 10, 0.22);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  box-shadow:
+    0 30px 60px -32px rgba(51, 17, 10, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+/* the folder's tab, riding above the panel's top-left corner */
+.folder-tab {
+  position: absolute;
+  bottom: 100%;
+  left: -1.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 22px 7px;
+  background: var(--tab);
+  color: var(--tab-ink);
+  border: 1.5px solid rgba(110, 14, 10, 0.22);
+  border-bottom: none;
+  border-radius: 10px 14px 0 0;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  box-shadow: 0 -6px 14px -10px rgba(51, 17, 10, 0.4);
+}
+.folder-tab--light { --tab-ink: var(--cream-bright); }
+/* a second, empty tab behind for depth — like the next file in the drawer */
+.folder-tab::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + 6px);
+  bottom: 0;
+  width: 74px;
+  height: 68%;
+  background: var(--cream-deep);
+  border: 1.5px solid rgba(110, 14, 10, 0.16);
+  border-bottom: none;
+  border-radius: 8px 12px 0 0;
+}
+
+/* give each filed section room for its tab, and air inside the folder */
+.cat-section .folder-panel,
+.pathway .folder-panel {
+  margin-top: 44px;
+}
+/* stop the tab's margin collapsing out of the section, so it stays in view */
+.pathway {
+  padding-top: clamp(16px, 3vh, 32px);
+}
+.cat-section__inner.folder-panel {
+  padding: clamp(26px, 4.5vw, 60px);
+}
+.pathway__trail.folder-panel .pathway__spine {
+  top: clamp(40px, 8vh, 96px); /* start the spine inside the folder, below its tab */
+}
+
+/* ---------------- envelope: the contact form ---------------- */
+.envelope {
+  position: relative;
+  padding: clamp(46px, 6vw, 64px) clamp(18px, 3vw, 34px) clamp(18px, 3vw, 30px);
+  background: linear-gradient(180deg, #ece9bd, var(--cream-deep));
+  border: 1.5px solid rgba(110, 14, 10, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 26px 48px -26px rgba(51, 17, 10, 0.55);
+  overflow: hidden;
+}
+/* the flap, folded open behind the letter */
+.envelope::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(52px, 7vw, 72px);
+  background: linear-gradient(180deg, var(--yale), var(--yale-deep));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  opacity: 0.92;
+}
+/* airmail edge: the classic striped border */
+.envelope::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 10px;
+  padding: 5px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--spice) 0 14px,
+    var(--cream-bright) 14px 28px,
+    var(--yale) 28px 42px,
+    var(--cream-bright) 42px 56px
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.85;
+}
+/* the wax seal on the flap */
+.envelope__seal {
+  position: absolute;
+  top: clamp(30px, 4.6vw, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #8f1c15, var(--garnet) 60%, var(--garnet-deep));
+  color: var(--amber);
+  font-size: 19px;
+  box-shadow:
+    0 6px 12px -4px rgba(74, 9, 6, 0.7),
+    inset 0 2px 3px rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+/* the letter inside */
+.envelope .mail-form,
+.envelope .thanks {
+  position: relative;
+  z-index: 1;
+  background: var(--cream-bright);
+  border: 1px solid rgba(110, 14, 10, 0.18);
+  border-radius: 6px;
+  padding: clamp(16px, 2.4vw, 26px);
+  box-shadow: 0 14px 26px -18px rgba(51, 17, 10, 0.5);
+}

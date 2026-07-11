@@ -31,7 +31,7 @@ export const MaskedReveal: React.FC<MaskedRevealProps> = ({ children, className,
         className="mask-reveal__inner"
         initial={reduced ? { opacity: 0 } : { opacity: 0, y: '100%' }}
         animate={show ? { opacity: 1, y: '0%' } : { opacity: 0, y: '100%' }}
-        transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] }}
       >
         {children}
       </motion.span>

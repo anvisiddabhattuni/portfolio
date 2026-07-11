@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Muse — a Pinterest board turned into a shoppable page">
+  <defs>
+    <filter id="wob" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="11" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="5"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="520" fill="#f0f0c9"/>
+
+  <g filter="url(#wob)">
+    <!-- the board: a masonry of pins -->
+    <g>
+      <rect x="64" y="88" width="96" height="128" rx="12" fill="#124e78"/>
+      <rect x="172" y="88" width="96" height="88" rx="12" fill="#f2bb05"/>
+      <rect x="172" y="188" width="96" height="120" rx="12" fill="#d74e09"/>
+      <rect x="64" y="228" width="96" height="88" rx="12" fill="#6e0e0a"/>
+      <rect x="64" y="328" width="96" height="104" rx="12" fill="#f2bb05"/>
+      <rect x="172" y="320" width="96" height="112" rx="12" fill="#124e78"/>
+      <text x="166" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#6e0e0a">one board in…</text>
+    </g>
+
+    <!-- the read: aesthetic distilled -->
+    <g stroke="#6e0e0a" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M300 260 C 336 260, 336 260, 368 260"/>
+      <path d="M356 246 L 372 260 L 356 274"/>
+    </g>
+    <circle cx="420" cy="260" r="34" fill="none" stroke="#d74e09" stroke-width="5"/>
+    <circle cx="420" cy="260" r="16" fill="#f2bb05"/>
+    <g stroke="#6e0e0a" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M472 260 C 508 260, 508 260, 540 260"/>
+      <path d="M528 246 L 544 260 L 528 274"/>
+    </g>
+
+    <!-- the shop: product cards with price tags -->
+    <g>
+      <rect x="576" y="96" width="160" height="112" rx="12" fill="#fbfaec" stroke="#6e0e0a" stroke-width="3"/>
+      <rect x="592" y="112" width="52" height="52" rx="8" fill="#124e78"/>
+      <rect x="656" y="118" width="64" height="10" rx="5" fill="#a97f63"/>
+      <rect x="656" y="138" width="44" height="10" rx="5" fill="#d3d195"/>
+      <rect x="592" y="176" width="54" height="16" rx="8" fill="#d74e09"/>
+
+      <rect x="576" y="224" width="160" height="112" rx="12" fill="#fbfaec" stroke="#6e0e0a" stroke-width="3"/>
+      <rect x="592" y="240" width="52" height="52" rx="8" fill="#f2bb05"/>
+      <rect x="656" y="246" width="64" height="10" rx="5" fill="#a97f63"/>
+      <rect x="656" y="266" width="44" height="10" rx="5" fill="#d3d195"/>
+      <rect x="592" y="304" width="54" height="16" rx="8" fill="#124e78"/>
+
+      <rect x="576" y="352" width="160" height="112" rx="12" fill="#fbfaec" stroke="#6e0e0a" stroke-width="3"/>
+      <rect x="592" y="368" width="52" height="52" rx="8" fill="#6e0e0a"/>
+      <rect x="656" y="374" width="64" height="10" rx="5" fill="#a97f63"/>
+      <rect x="656" y="394" width="44" height="10" rx="5" fill="#d3d195"/>
+      <rect x="592" y="432" width="54" height="16" rx="8" fill="#d74e09"/>
+      <text x="656" y="62" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#6e0e0a">…a shoppable page out</text>
+    </g>
+
+    <!-- wordmark -->
+    <text x="400" y="480" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="56" letter-spacing="6" fill="#124e78">MUSE</text>
+  </g>
+</svg>

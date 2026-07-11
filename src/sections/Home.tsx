@@ -1,0 +1,670 @@
+/* ============================================================
+   Home — product-management portfolio, single page.
+   NKORA-style rhythm: every section wears its own palette color.
+   Navigation is a vertical stack of folder tabs peeking in from
+   the right edge, with the old folder dock's proximity-magnify
+   animation and a scrollspy that pulls the active tab out.
+   The Frame-1 hero pins, splits in four directions on scroll,
+   and lands directly on the About section.
+   ============================================================ */
+import { useEffect, useRef, useState } from 'react';
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
+import { PROFILE, CONTACT } from '../content';
+import { WaveArt } from '../components/WaveArt';
+import { RisingWords } from '../components/RisingWords';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { CaseStudies } from './Pathway';
+import { AboutStop, ExperienceStop, SkillsStop } from './Stops';
+
+/** Very light wave linework laid behind a section for texture. */
+function WaveTexture({ variant }: { variant: 1 | 2 | 3 | 4 }) {
+  return (
+    <div className="nk-texture" aria-hidden="true">
+      <WaveArt variant={variant} bare />
+    </div>
+  );
+}
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const reduced = useReducedMotion();
+  if (reduced) return <div>{children}</div>;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-12%' }}
+      transition={{ duration: 1.2, delay, ease }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ---------------- corner-flying section headers ---------------- */
+
+/**
+ * CornerTitle — the section's display headline sails in from a bottom
+ * corner as the section enters the viewport, then stays put. The
+ * flight spreads over the first 40% of the title's scroll journey —
+ * a slow drift — and since the title sits mid-page, a nav jump
+ * (landing ≈0.58) still arrives fully settled. Scroll-linked;
+ * static under reduced motion.
+ */
+function CornerTitle({
+  text,
+  from = 'left',
+  className = '',
+}: {
+  text: string;
+  from?: 'left' | 'right';
+  className?: string;
+}) {
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: p } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const dir = from === 'left' ? -1 : 1;
+  const x = useTransform(p, [0, 0.5], [`${dir * 70}vw`, '0vw']);
+  const y = useTransform(p, [0, 0.5], ['26vh', '0vh']);
+  const rotate = useTransform(p, [0, 0.5], [dir * 9, 0]);
+  const opacity = useTransform(p, [0, 0.28], [0, 1]);
+
+  if (reduced) {
+    return <h2 className={className}>{text}</h2>;
+  }
+
+  return (
+    <div ref={ref} className="corner-title">
+      <motion.h2 className={className} style={{ x, y, rotate, opacity }}>
+        {text}
+      </motion.h2>
+    </div>
+  );
+}
+
+/**
+ * SectionIntro — the full-viewport color page that announces each part
+ * of the site (the EXPERIENCE page pattern, now for every section).
+ * Title flies in from a corner and stays put; the index number ties the
+ * page to its folder tab (01 · About, 02 · Work, …).
+ */
+function SectionIntro({
+  id,
+  index,
+  title,
+  statement,
+  tone,
+  from,
+}: {
+  id: string;
+  index: string;
+  title: string;
+  statement: string;
+  tone: 'amber' | 'garnet' | 'spice' | 'olive' | 'yale';
+  from: 'left' | 'right';
+}) {
+  return (
+    <section className={`nk-human nk-intro nk-intro--${tone}`} id={id}>
+      <span className="nk-intro__n" aria-hidden="true">{index}</span>
+      <div className="nk-human__words">
+        <CornerTitle text={title} from={from} className="nk-display nk-display--stack" />
+      </div>
+      <div className="nk-human__text">
+        <Reveal>
+          <p className="nk-statement">{statement}</p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- vertical folder tabs, right edge ---------------- */
+
+interface Tab {
+  id: string;
+  label: string;
+}
+
+const TABS: Tab[] = [
+  { id: 'hero', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'case-studies', label: 'Work' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'contact', label: 'Contact' },
+];
+
+/** each folder tab wears its section's intro-page color — the rail shows
+    the whole palette, one color per section, no neighbors repeating */
+const TAB_TONES: Record<string, { bg: string; ink: string }> = {
+  hero: { bg: 'var(--cream)', ink: 'var(--garnet)' },
+  about: { bg: 'var(--amber)', ink: 'var(--garnet)' },
+  'case-studies': { bg: 'var(--garnet)', ink: 'var(--cream)' },
+  experience: { bg: 'var(--spice)', ink: 'var(--cream)' },
+  skills: { bg: 'var(--olive)', ink: 'var(--cream)' },
+  contact: { bg: 'var(--yale)', ink: 'var(--cream)' },
+};
+
+const SECTION_IDS = TABS.map((t) => t.id);
+
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState('');
+  useEffect(() => {
+    const compute = () => {
+      const mid = window.innerHeight * 0.45;
+      // walk the sections back to front: the sticky hero's rect still
+      // straddles the viewport while About slides over it, so the
+      // LATEST section past the midline must win, not the first
+      let current = ids[0];
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const el = document.getElementById(ids[i]);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= mid) {
+          current = ids[i];
+          break;
+        }
+      }
+      setActive(current);
+    };
+    compute();
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute);
+    return () => {
+      window.removeEventListener('scroll', compute);
+      window.removeEventListener('resize', compute);
+    };
+  }, [ids]);
+  return active;
+}
+
+/** Expandable corner nav: a small cream pill in the top-right that
+    unfolds into a paper panel listing every section with its palette
+    dot. Items stagger in; the active section is marked in garnet. */
+function CornerNav() {
+  const [open, setOpen] = useState(false);
+  const active = useActiveSection(SECTION_IDS) || TABS[0].id;
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  const goTo = (id: string) => {
+    setOpen(false);
+    // the hero is sticky inside a taller wrapper, so scrollIntoView
+    // stops mid-split; Home means the very top of the page
+    if (id === 'hero') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.history.replaceState(null, '', '#hero');
+      return;
+    }
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.history.replaceState(null, '', `#${id}`);
+  };
+
+  return (
+    <div className="corner-nav">
+      <motion.button
+        type="button"
+        className="corner-nav__toggle"
+        onClick={() => setOpen((v) => !v)}
+        whileHover={{ scale: 1.05, y: -1 }}
+        whileTap={{ scale: 0.94 }}
+        aria-expanded={open}
+        aria-label={open ? 'Close menu' : 'Open menu'}
+      >
+        <span>Menu</span>
+        <motion.span
+          className="corner-nav__icon"
+          aria-hidden="true"
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+        >
+          +
+        </motion.span>
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              className="corner-nav__scrim"
+              onClick={() => setOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              aria-hidden="true"
+            />
+            <motion.nav
+              className="corner-nav__panel"
+              aria-label="Sections"
+              initial={{ opacity: 0, y: -12, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.97 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            >
+              {TABS.map((t, i) => (
+                <motion.button
+                  key={t.id}
+                  type="button"
+                  className="corner-nav__item"
+                  data-active={active === t.id}
+                  aria-current={active === t.id ? 'page' : undefined}
+                  onClick={() => goTo(t.id)}
+                  initial={{ opacity: 0, x: 26 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.05 * i, type: 'spring', stiffness: 320, damping: 26 }}
+                >
+                  <span
+                    className="corner-nav__dot"
+                    aria-hidden="true"
+                    style={{ background: TAB_TONES[t.id].bg }}
+                  />
+                  <span className="corner-nav__label">{t.label}</span>
+                  <span className="corner-nav__arrow" aria-hidden="true">→</span>
+                </motion.button>
+              ))}
+            </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/** Thin amber→spice→garnet bar along the top tracking the walk. */
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 26, mass: 0.4 });
+  return <motion.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />;
+}
+
+/** Name badge pinned inside the hero's top left corner — the menu
+    box's twin. It belongs to the landing page, so it scrolls away
+    with it instead of following. */
+function HeroName() {
+  return (
+    <motion.div
+      className="nk-hero__name"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.1, delay: 0.4, ease }}
+    >
+      <span className="nk-hero__name-main">Anvi Sidda</span>
+    </motion.div>
+  );
+}
+
+/* ---------------- hero (Frame 1, splits four ways on scroll) ---------------- */
+
+/**
+ * A live rebuild of Anvi's `design/Frame 1.svg`, with her watercolor
+ * dogs placed around the frame. Pinned for most of a viewport of
+ * scroll; every element flies out in its own direction and the page
+ * lands directly on About.
+ */
+function Hero() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: p } = useScroll({
+    target: wrapRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const fade = useTransform(p, [0.4, 0.8], [1, 0]);
+
+  const anvisX = useTransform(p, [0, 1], ['0vw', '-52vw']);
+  const anvisY = useTransform(p, [0, 1], ['0vh', '-42vh']);
+  const anvisR = useTransform(p, [0, 1], [0, -7]);
+
+  const greenX = useTransform(p, [0, 1], ['0vw', '-58vw']);
+  const greenY = useTransform(p, [0, 1], ['0vh', '32vh']);
+  const greenR = useTransform(p, [0, 1], [0, -10]);
+
+  const amberX = useTransform(p, [0, 1], ['0vw', '58vw']);
+  const amberY = useTransform(p, [0, 1], ['0vh', '-46vh']);
+  const amberR = useTransform(p, [0, 1], [0, 9]);
+
+  const portX = useTransform(p, [0, 1], ['0vw', '52vw']);
+  const portY = useTransform(p, [0, 1], ['0vh', '44vh']);
+  const portR = useTransform(p, [0, 1], [0, 6]);
+
+  const ctaOpacity = useTransform(p, [0, 0.15], [1, 0]);
+
+  return (
+    <div className="nk-hero-wrap" ref={wrapRef}>
+      <section className="nk-hero" id="hero">
+        <HeroName />
+        <div className="f1">
+          <motion.div
+            className="f1__pos f1__pos--anvis"
+            style={{ x: anvisX, y: anvisY, rotate: anvisR, opacity: fade }}
+          >
+            <motion.span
+              className="f1__anvis"
+              initial={{ opacity: 0, y: -40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.15, ease }}
+            >
+              Anvi&rsquo;s
+            </motion.span>
+          </motion.div>
+
+          <motion.div
+            className="f1__pos f1__pos--green"
+            style={{ x: greenX, y: greenY, rotate: greenR, opacity: fade }}
+          >
+            <motion.div
+              className="f1__square"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.35, ease }}
+            >
+              <img
+                src="/dogs/frame1-dogs.png"
+                alt="Crayon drawing of a golden retriever on an olive-green square"
+                draggable={false}
+              />
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="f1__pos f1__pos--amber"
+            style={{ x: amberX, y: amberY, rotate: amberR, opacity: fade }}
+          >
+            <motion.div
+              className="f1__square"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.5, ease }}
+            >
+              <img
+                src="/dogs/frame1-dogs.png"
+                alt="Crayon drawing of a white poodle on an amber-gold square"
+                draggable={false}
+              />
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="f1__pos f1__pos--portfolio"
+            style={{ x: portX, y: portY, rotate: portR, opacity: fade }}
+          >
+            <motion.span
+              className="f1__portfolio"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.65, ease }}
+            >
+              Portfolio
+            </motion.span>
+          </motion.div>
+        </div>
+
+        <motion.div
+          className="nk-hero__actions"
+          style={{ opacity: ctaOpacity }}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.9, ease }}
+        >
+          <a className="pill pill--dark" href="#about">
+            See the work
+            <svg viewBox="0 0 41 21" aria-hidden="true" className="pill__arrow">
+              <path
+                d="M1.8 1.6 17.3 17.6a4.4 4.4 0 0 0 6.4 0L39 1.6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeMiterlimit="10"
+              />
+            </svg>
+          </a>
+          <a
+            className="pill pill--outline"
+            href={CONTACT.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Resume ↗
+          </a>
+        </motion.div>
+      </section>
+    </div>
+  );
+}
+
+/* ---------------- contact (cream, real form) ---------------- */
+
+type FormStatus = 'idle' | 'sending' | 'sent' | 'error';
+
+function ContactSection() {
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState<FormStatus>('idle');
+  const [problem, setProblem] = useState('');
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setProblem('All three fields are needed: name, email, and a message.');
+      setStatus('error');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setProblem('That email does not look right. Mind double-checking it?');
+      setStatus('error');
+      return;
+    }
+    setProblem('');
+    setStatus('sending');
+    try {
+      const res = await fetch(CONTACT.formEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error(`Form endpoint returned ${res.status}`);
+      setStatus('sent');
+    } catch {
+      setProblem('The message did not go through. Email me directly instead, I read everything.');
+      setStatus('error');
+    }
+  };
+
+  const field = (key: keyof typeof form) => ({
+    value: form[key],
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm({ ...form, [key]: e.target.value }),
+  });
+
+  return (
+    <section className="nk-contact" id="contact-detail">
+      <WaveTexture variant={2} />
+
+      <div className="nk-contact__inner">
+        <div className="nk-contact__intro">
+          <h2 className="nk-display nk-contact__heading">
+            <RisingWords text="Say hello" />
+          </h2>
+          <Reveal delay={0.1}>
+            <p className="nk-body nk-contact__lede">
+              Recruiting, feedback, or just want to talk product? Leave a note here and it
+              lands in my inbox.
+            </p>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <div className="nk-contact__dogs" aria-hidden="true">
+              <img src="/dogs/entry-golden.png" alt="" draggable={false} />
+              <img src="/dogs/entry-poodle.png" alt="" draggable={false} />
+            </div>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="nk-contact__links">
+              <a className="pill pill--mini" href={`mailto:${CONTACT.email}`}>Email</a>
+              <a className="pill pill--mini" href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a className="pill pill--mini" href={CONTACT.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a className="pill pill--mini" href={CONTACT.devpost} target="_blank" rel="noopener noreferrer">Devpost</a>
+              <a className="pill pill--mini" href={CONTACT.resume} target="_blank" rel="noopener noreferrer">Resume</a>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.1}>
+          {status === 'sent' ? (
+            <motion.div
+              className="nk-form nk-form--sent"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <p className="nk-form__thanks">
+                Got it. Thanks, {form.name.split(' ')[0] || 'friend'}, I will get back to you
+                soon.
+              </p>
+            </motion.div>
+          ) : (
+            <form className="nk-form" onSubmit={submit} noValidate>
+              <label>
+                Name
+                <input type="text" name="name" autoComplete="name" {...field('name')} />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" autoComplete="email" {...field('email')} />
+              </label>
+              <label>
+                Message
+                <textarea name="message" rows={6} {...field('message')} />
+              </label>
+              {status === 'error' && (
+                <p className="nk-form__error" role="alert">
+                  {problem}{' '}
+                  <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                </p>
+              )}
+              <button className="pill pill--dark nk-form__submit" type="submit" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Sending…' : 'Send it'}
+              </button>
+            </form>
+          )}
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="nk-footer">
+      <h2 className="nk-display nk-footer__title">
+        <RisingWords text="THANKS FOR STOPPING BY" />
+      </h2>
+      <div className="nk-footer__row">
+        <div className="nk-footer__links">
+          <a href={`mailto:${CONTACT.email}`}>Email</a>
+          <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+          <a href={CONTACT.github} target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a href={CONTACT.devpost} target="_blank" rel="noopener noreferrer">
+            Devpost
+          </a>
+          <a href={CONTACT.resume} target="_blank" rel="noopener noreferrer">
+            Resume
+          </a>
+        </div>
+        <p className="nk-footer__copy">
+          © 2026 {PROFILE.name} · {PROFILE.location}
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+export function Home() {
+  return (
+    <div className="nk-page">
+      <ScrollProgress />
+      <CornerNav />
+      <main>
+        <Hero />
+        <SectionIntro
+          id="about"
+          index="01"
+          title="ABOUT"
+          tone="amber"
+          from="left"
+          statement="PM intern at Colaberry, CS student at UT Dallas, and handler of two very opinionated tour guides."
+        />
+        {/* Original editorial About on an olive band (anvisidda.com format) */}
+        <div className="nk-legacy nk-legacy--olive">
+          <WaveTexture variant={4} />
+          <AboutStop />
+        </div>
+        <SectionIntro
+          id="case-studies"
+          index="02"
+          title="WORK"
+          tone="garnet"
+          from="left"
+          statement="Three products, spec to ship. Open one for the problem, the calls I made, and what came of it."
+        />
+        {/* Original folder-styled case studies (cream band, yale folder tab) */}
+        <div className="nk-legacy">
+          <CaseStudies />
+        </div>
+        <SectionIntro
+          id="experience"
+          index="03"
+          title="EXPERIENCE"
+          tone="spice"
+          from="left"
+          statement="Internships, campus leadership, and hackathon teams. Here is what I owned and what came of it."
+        />
+        {/* Original experience folder on a yale band */}
+        <div className="nk-legacy nk-legacy--yale">
+          <ExperienceStop />
+        </div>
+        <SectionIntro
+          id="skills"
+          index="04"
+          title="SKILLS"
+          tone="olive"
+          from="left"
+          statement="What I reach for, from writing the spec to shipping the build to growing it after."
+        />
+        {/* Skills folder on an amber band */}
+        <div className="nk-legacy nk-legacy--amber">
+          <SkillsStop />
+        </div>
+        <SectionIntro
+          id="contact"
+          index="05"
+          title="CONTACT"
+          tone="yale"
+          from="left"
+          statement="You made it to the end of the walk. Say hello, ask about the work, or send the dogs a compliment."
+        />
+        <ContactSection />
+      </main>
+      <Footer />
+    </div>
+  );
+}

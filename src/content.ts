@@ -1,5 +1,6 @@
 /* ============================================================
    Content — the single source of truth for the portfolio.
+   Synced to the July 2026 resume + LinkedIn.
    Positioning: Product (primary), AI Product / AI Eng,
    Software Engineering, with Product Design / UX as support.
    ============================================================ */
@@ -8,20 +9,27 @@ export const PROFILE = {
   name: 'Anvi Siddabhattuni',
   /** the one line a recruiter should remember */
   positioning:
-    'Computer Science student at UT Dallas, building at the intersection of product, AI, design, and engineering.',
+    'PM intern at Colaberry. My content strategy at ACM UTD reached 314K views in one month, and my hackathon build won the State Farm Challenge at WEHack 2026.',
   roles: ['Product Management', 'AI Product / AI Engineering', 'Software Engineering', 'Product Design / UX'],
-  location: 'Dallas, TX',
+  location: 'Dallas–Fort Worth, TX',
 };
 
 export const ABOUT = {
   name: 'Anvi',
   intro:
-    "I'm Anvi, a CS student at UT Dallas and product-minded builder. These two dogs are my unofficial tour guides. I work where product, AI, design, and engineering meet, and I like owning a problem end to end until the answer feels obvious.",
-  interests: ['Product strategy', '0→1 products', 'AI-powered features', 'React · Next.js · TypeScript', 'Design systems & UX', 'Data-informed decisions'],
+    "I'm Anvi, a product management intern at Colaberry and a CS student at UT Dallas. These two dogs are the unofficial tour guides. I found product through the side door: running marketing for two campus orgs and building at hackathons, where the part I kept coming back to was deciding what to build and proving it worked. That's the job now. Write the spec, cut the scope, ship it, check the numbers.",
+  interests: [
+    'Product discovery',
+    'Roadmapping & specs',
+    '0→1 AI products',
+    'A/B testing & product analytics',
+    'Evals & prompt design',
+    'Growth & content strategy',
+  ],
   background:
-    'I lead front-end on hackathon-winning teams, run marketing and design for two of UT Dallas’ largest tech orgs, and ship side projects from the first Figma frame to production on Vercel. I’m comfortable across discovery, design, build, and launch.',
+    'By day I’m a PM intern on a Scrum team at Colaberry, running feature discovery for data-analytics tooling. On campus I lead a 19-officer marketing and design team at ACM UTD, where one month of our content reached 314K Instagram views. I also build my own products. The latest won the State Farm Challenge at WEHack 2026.',
   goals:
-    'Pursuing a career in product management: building at the intersection of user problems, design, and engineering, and shipping products people actually use.',
+    'Looking for a Summer 2027 PM internship with real ownership: a problem I can research properly and ship against.',
 };
 
 export interface Project {
@@ -44,16 +52,54 @@ export interface Project {
   technical: string;
   impact: string;
   next: string;
-  link?: { label: string; href: string };
+  links?: { label: string; href: string }[];
   metrics: { label: string; value: string }[];
 }
 
 export const PROJECTS: Project[] = [
   {
-    id: 'riskradar',
+    id: 'muse',
     object: 'lantern',
+    title: 'Muse',
+    tagline: 'Reads a whole Pinterest board’s aesthetic and turns it into a shoppable page of real products',
+    role: 'Product Manager & Builder · Solo',
+    timeframe: 'Jul 2026',
+    tags: ['AI', 'Product', '0→1'],
+    stack: ['Next.js', 'Vision model', 'Embeddings', 'OpenAI'],
+    problem:
+      'People collect aesthetics on Pinterest, but shopping them is manual: reverse-image-searching one pin at a time never captures the overall vibe of a board. The look lives across fifty pins, not in any single one.',
+    users:
+      'Pinterest-first shoppers: people who curate boards for a look they want to buy into, not for a single item.',
+    insight:
+      'The unit of intent is the board, not the pin. Reading the aesthetic across every pin (palette, materials, style) and matching it against product embeddings gets far closer to what the user actually wants than any one-image match.',
+    decisions: [
+      'Wrote the spec first and cut scope to a focused MVP: one board in, one shoppable page out.',
+      'Set the success metrics up front (12+ real product matches per board, under 30 seconds to results) and built to hit them.',
+      'Chose a vision model + embeddings pipeline over per-pin reverse image search, so results match the board’s overall aesthetic.',
+    ],
+    tradeoffs:
+      'Matched against a curated product catalog instead of live-scraping every retailer. Smaller inventory, but reliable matches, stable latency, and a demo that always works.',
+    technical:
+      'Built on Next.js: a vision model reads the board’s pins into an aesthetic profile, embeddings match that profile against product data, and the results render as a shoppable page.',
+    impact:
+      'Wrote the spec, set the targets, built the product, and hit them: 12+ real matches per board in under 30 seconds.',
+    next:
+      'Saved boards and accounts, affiliate links, and evals that score match quality so the matching improves against real user feedback instead of my own taste.',
+    links: [
+      { label: 'Live site', href: 'https://frontend-xi-eight-44.vercel.app/' },
+      { label: 'GitHub', href: 'https://github.com/anvisiddabhattuni/Sartorial-Curation' },
+    ],
+    metrics: [
+      { label: 'Matches per board', value: '12+' },
+      { label: 'To results', value: '<30s' },
+      { label: 'Spec to ship', value: 'Solo' },
+    ],
+  },
+  {
+    id: 'riskradar',
+    object: 'stump',
     title: 'Risk Radar',
-    tagline: 'Home insurance that helps you act on risk before damage happens',
+    tagline: 'Won the State Farm Challenge at WEHack 2026 by flagging home risk before it becomes damage',
     role: 'Front-End Lead · 4-person team',
     timeframe: 'Apr 2026 · WEHack 2026',
     tags: ['Product', 'AI', 'Front-end', 'Data'],
@@ -77,7 +123,7 @@ export const PROJECTS: Project[] = [
       'Won the State Farm Challenge at WEHack 2026. Judges responded to how the floor plan turned abstract risk into concrete, room-level insight a homeowner could act on in minutes.',
     next:
       'Real-time weather and hazard alerts, maintenance timeline tracking, predictive risk modeling, and progress tracking that shows how user actions improve their score.',
-    link: { label: 'Devpost', href: 'https://devpost.com/software/risk-radar-6mv83t' },
+    links: [{ label: 'Devpost', href: 'https://devpost.com/software/risk-radar-6mv83t' }],
     metrics: [
       { label: 'State Farm Challenge', value: 'Winner' },
       { label: 'Person team', value: '4' },
@@ -88,34 +134,38 @@ export const PROJECTS: Project[] = [
     id: 'analytico',
     object: 'birdhouse',
     title: 'Analytico',
-    tagline: 'Analytics for creators who need to know what to do next',
-    role: 'Creator + Front-End Lead · Founding team',
+    tagline: 'A stalled front-end project I pivoted into a working analytics app for student-org marketers',
+    role: 'Product Manager & Builder · Founding team',
     timeframe: 'Jan 2025 – Present',
-    tags: ['Product', 'Front-end', 'Design'],
-    stack: ['React', 'Tailwind', 'Figma'],
+    tags: ['Product', 'Full-stack', 'Design'],
+    stack: ['React', 'Tailwind', 'Supabase', 'Figma'],
     problem:
-      'Creators and social media managers do not know how to grow their accounts. Their data is scattered and hard to read, so it is tough to see where they are falling short or what to do next.',
+      'Student-org marketers own growth but their data is scattered and hard to read, so it’s tough to see where they’re falling short or what to do next. I hit this problem myself running marketing for two orgs at UT Dallas.',
     users:
-      'Social media managers and creators who own performance but are not full-time data analysts.',
+      'Student-org marketers and social media managers: people who own performance numbers but are not full-time data analysts.',
     insight:
-      'The exciting idea was an AI growth agent, but none of us knew how to build and connect one yet. The right first step was analytics dashboards that show where users are falling short, with the agent as a later phase.',
+      'The project had stalled as a front-end-only build with no backend in sight. The pivot: narrow to a user I deeply understand (student-org marketers, and I am one), and own the full stack myself so the product can actually ship instead of waiting on integration.',
     decisions: [
-      'Built analytics dashboards first instead of chasing the AI agent upfront.',
+      'Pivoted a stalled front-end-only project into a Facebook analytics app for student-org marketers.',
+      'Set the roadmap and run ongoing user research with org marketers on campus.',
       'Designed every view to end in a suggested next step, not just raw metrics.',
-      'Kept the UI calm and scannable so non-analysts are not overwhelmed.',
     ],
     tradeoffs:
-      'Deferred the AI agent to focus on what the team could actually ship. That meant delivering user value now instead of betting everything on a feature we had not figured out yet.',
+      'Chose Supabase over a custom backend, trading infrastructure control for shipping speed. Auth, data model, and APIs stood up in days instead of weeks, which is what a one-person build needed.',
     technical:
-      'Co-created the product idea and led the front end from Figma wireframes to a responsive React + Tailwind UI: dashboards, report views, and recommendation flows.',
+      'I own the whole build: the Supabase backend and data model, plus the React + Tailwind front end across dashboards, reports, and recommendation flows.',
     impact:
-      'Pre-launch. We have a complete Figma design and a built front end, but the backend was never connected, so the product is not live yet.',
+      'The stalled project is now in active build with a working backend: a live data model, dashboards rendering real data, and a user research loop feeding the roadmap.',
     next:
-      'Set up a shared front-end/back-end contract from day one: what data the UI needs and what the API provides, so both sides build toward integration instead of parallel silos.',
+      'Instagram support next, since that’s where student orgs actually live. Then recommendation quality: turning “here’s your reach” into “post this, at this time, to this audience.”',
+    links: [
+      { label: 'Live site', href: 'https://www.4nalytico.com/' },
+      { label: 'GitHub', href: 'https://github.com/anvisiddabhattuni/analytico' },
+    ],
     metrics: [
-      { label: 'Status', value: 'Pre-launch' },
-      { label: 'Role', value: 'FE Lead' },
-      { label: 'Stack', value: 'React' },
+      { label: 'Status', value: 'In build' },
+      { label: 'Role', value: 'PM & Builder' },
+      { label: 'Backend', value: 'Supabase' },
     ],
   },
 ];
@@ -130,24 +180,86 @@ export interface Experience {
 }
 
 export const EXPERIENCES: Experience[] = [
-  { id: 'acm', title: 'ACM UTD', role: 'Marketing Co-Director', timeframe: 'Jan 2026 – Present', blurb: 'The largest computing org on campus (1,000+ members). I lead the marketing and design team end to end, and drove February 2026 to 314K+ Instagram views and 15.7K accounts reached, the org’s strongest month on record, by tightening cadence and aligning creative to each division’s audience.', tint: 'var(--sky-soft)' },
-  { id: 'ktp', title: 'Kappa Theta Pi', role: 'VP of Marketing', timeframe: 'Jan 2026 – Present', blurb: 'Professional technology fraternity at UT Dallas. I own brand and marketing for recruitment and professional events, building multi-week Rush campaigns with the exec board and tying marketing output to concrete chapter-growth goals (applicant volume, event turnout).', tint: 'var(--bloom-soft)' },
-  { id: 'beats', title: 'Beats by Dre', role: 'Data Analytics Extern', timeframe: 'Dec 2024 – Mar 2025', blurb: 'Analyzed marketing datasets to surface targeting and content insights for campaign teams, and built lightweight LLM-assisted reporting workflows that cut turnaround time on recurring requests.', tint: 'var(--sun-soft)' },
-  { id: 'hs', title: 'HSBuilds', role: 'Lead Developer', timeframe: 'Aug 2023 – Aug 2024', blurb: 'Student-run nonprofit web-dev group. Led developers and designers across 10+ nonprofit projects on GitHub, shipping responsive sites while owning client communication, requirements, and delivery scheduling.', tint: 'var(--leaf-light)' },
-  { id: 'hacks', title: 'Hackathons', role: 'Winner & finalist', timeframe: 'Ongoing', blurb: 'Front-end lead on hackathon teams: fast discovery, scrappy prototypes, and demos that lead with the user problem. Most recently won the State Farm Challenge at WEHack 2026.', tint: 'var(--sky-soft)' },
+  {
+    id: 'colaberry',
+    title: 'Colaberry',
+    role: 'Product Management Intern',
+    timeframe: 'Jun 2026 – Present',
+    blurb:
+      'PM intern on a Scrum team in Plano building data-analytics tooling. I run feature discovery and contribute to sprint planning. My job is turning user problems into a backlog the engineers actually want to build, then shipping against it.',
+    tint: 'var(--sky-soft)',
+  },
+  {
+    id: 'acm',
+    title: 'ACM UTD',
+    role: 'Marketing Co-Director',
+    timeframe: 'Jan 2026 – Present',
+    blurb:
+      '314K Instagram views and 15.7K accounts reached in one month, a record for the largest CS org at UT Dallas (1,000+ members). I own the content strategy and lead 19 marketing and design officers. I got the numbers by A/B testing posting cadence and splitting creative by audience, and I replaced ad-hoc request DMs with an intake tool that routes 90+ requests a semester into one prioritized queue.',
+    tint: 'var(--sun-soft)',
+  },
+  {
+    id: 'ktp',
+    title: 'Kappa Theta Pi',
+    role: 'VP of Marketing',
+    timeframe: 'Jan 2026 – May 2026',
+    blurb:
+      'Professional technology fraternity at UT Dallas; promoted from Director of Social Media after one year. Ran a 60-applicant recruitment funnel that converted 32% into a 19-person pledge class, and led a 3-person social and design team while setting the semester marketing roadmap with the exec board.',
+    tint: 'var(--bloom-soft)',
+  },
+  {
+    id: 'beats',
+    title: 'Beats by Dre',
+    role: 'Data Analytics Extern',
+    timeframe: 'Dec 2024 – Mar 2025',
+    blurb:
+      'Remote externship via Extern. Analyzed ~150 survey responses and Amazon reviews on the Beats Pill, then turned the sentiment and pricing findings into product recommendations. LLM tooling cut the analysis time roughly in half.',
+    tint: 'var(--sun-soft)',
+  },
+  {
+    id: 'hacks',
+    title: 'Hackathons',
+    role: 'Winner & finalist',
+    timeframe: 'Ongoing',
+    blurb:
+      'Front-end lead on hackathon teams. Fast discovery, scrappy prototypes, demos that open with the user problem. Most recent: Risk Radar, winner of the State Farm Challenge at WEHack 2026.',
+    tint: 'var(--sky-soft)',
+  },
 ];
 
 export const SKILLS = [
-  { kind: 'brush' as const, title: 'Product & UX', items: ['User research', 'Jobs-to-be-done', 'Prioritization', 'PRDs & specs', 'Figma prototyping', 'Design systems'] },
-  { kind: 'chart' as const, title: 'Front-end & Frameworks', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Node / NestJS', 'Flask'] },
-  { kind: 'laptop' as const, title: 'Languages & Data', items: ['Java', 'C / C++', 'Python', 'JavaScript', 'SQL', 'MongoDB / PostgreSQL'] },
-  { kind: 'notebook' as const, title: 'AI & Experimentation', items: ['OpenAI API', 'Vertex AI (Gemini)', 'Elasticsearch', 'A/B testing', 'Funnels & metrics'] },
+  {
+    kind: 'brush' as const,
+    title: 'Product',
+    items: ['Discovery', 'User research', 'Roadmapping', 'A/B testing', 'Product analytics', 'Agile / Scrum'],
+  },
+  {
+    kind: 'notebook' as const,
+    title: 'AI',
+    items: ['LLM app development', 'Evals & prompt design', 'Model selection & cost/latency tradeoffs', 'Embeddings & semantic search', 'OpenAI API', 'Vertex AI (Gemini)'],
+  },
+  {
+    kind: 'laptop' as const,
+    title: 'Build',
+    items: ['Next.js · React · TypeScript', 'Tailwind', 'Flask · Node · Python', 'SQL · Supabase', 'Figma', 'Git'],
+  },
+  {
+    kind: 'chart' as const,
+    title: 'Growth',
+    items: ['Content strategy', 'Social growth', 'Campaign roadmaps', 'Funnel ownership'],
+  },
 ];
 
 export const CONTACT = {
+  /**
+   * Serverless endpoint that sends contact form submissions through Resend.
+   * Requires RESEND_API_KEY in the deployment environment.
+   */
+  formEndpoint: '/api/contact',
   email: 'anvimsiddabhattuni@gmail.com',
   linkedin: 'https://www.linkedin.com/in/anvi-siddabhattuni',
+  linkedinProjects: 'https://www.linkedin.com/in/anvi-siddabhattuni/details/projects/',
   github: 'https://github.com/anvisiddabhattuni',
   devpost: 'https://devpost.com/anvisiddabhattuni',
-  resume: '/Anvi-Siddabhattuni-Resume.pdf',
+  resume: '/Anvi_Siddabhattuni_PM_Resume_JULY2026.pdf',
 };

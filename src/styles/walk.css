@@ -26,9 +26,9 @@
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(27, 25, 22, 0),
-    rgba(27, 25, 22, 0.28),
-    rgba(27, 25, 22, 0)
+    rgba(110, 14, 10, 0),
+    rgba(110, 14, 10, 0.3),
+    rgba(110, 14, 10, 0)
   );
   background-size: 220% 100%;
   animation: divider-shift 7s linear infinite;
@@ -168,7 +168,7 @@
   text-align: left;
 }
 .trail-nav button[data-active='true'] {
-  background: rgba(124, 35, 51, 0.1);
+  background: rgba(242, 187, 5, 0.22);
   transform: translateY(-2px);
 }
 .trail-nav__dot {
@@ -215,26 +215,9 @@
 }
 
 @media (max-width: 900px) {
+  /* the folder dock owns navigation on small screens */
   .trail-nav {
-    right: 12px;
-    top: auto;
-    bottom: 18px;
-    transform: none;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    max-width: min(100vw - 24px, 420px);
-    gap: 4px;
-    padding: 8px;
-  }
-  .trail-nav button {
-    min-width: auto;
-    padding: 8px 10px;
-    gap: 6px;
-  }
-  .trail-nav__label {
-    display: inline;
-    font-size: 11px;
+    display: none;
   }
   .enter-band {
     min-height: 56vh;
