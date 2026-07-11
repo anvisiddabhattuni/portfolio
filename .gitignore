@@ -17,6 +17,7 @@ dist-ssr
 .dev.vars
 .dev.vars.*
 !.dev.vars.example
+.wrangler
 
 # Raw camera originals — the site uses the resized, EXIF-stripped web
 # copies; the originals are large and can carry GPS metadata
