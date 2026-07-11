@@ -386,31 +386,6 @@
   width: clamp(18px, 2cqw, 23px);
   height: clamp(18px, 2cqw, 23px);
 }
-@media (max-width: 640px) {
-  .nk-hero__actions-wrap {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    justify-content: center;
-    margin-top: clamp(16px, 3vh, 24px);
-    pointer-events: none;
-  }
-  .nk-hero__actions {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: min(284px, calc(100vw - 40px));
-  }
-  .nk-hero__button {
-    --hover-button-w: 100%;
-    --hover-button-h: 54px;
-    font-size: 15px;
-    padding: 0 18px;
-  }
-}
-
-
 /* The frame: proportions and placements lifted from the uploaded
    1280×832 Frame 1 SVG reference. */
 .f1 {
@@ -1185,4 +1160,61 @@
   .nk-exp-row__time { margin-left: 0; }
 
   .nk-cta__links { flex-direction: column; gap: 18px; }
+}
+
+/* ---------------- phones ----------------
+   The Frame-1 hero recomposes to a portrait canvas: name up top, the
+   two squares staggered like the original, "Portfolio" and the CTAs
+   at the bottom. The nav compacts so all six stops fit one row. */
+
+@media (max-width: 640px) {
+  .top-nav {
+    gap: 2px;
+    max-width: calc(100vw - 16px);
+    padding: 4px;
+  }
+  .top-nav__item,
+  .top-nav__item[data-nav-id] {
+    --hover-button-w: auto;
+    --hover-button-h: 32px;
+    padding: 0 9px;
+    font-size: 11.5px;
+  }
+  .top-nav__item::before { display: none; }
+  .top-nav__item .nk-hover-button__blob { transform-origin: center; }
+
+  .nk-page section.nk-hero { padding-top: 64px; }
+
+  .f1 {
+    width: min(92vw, calc(78svh * (340 / 470)));
+    aspect-ratio: 340 / 470;
+  }
+  .f1__anvis,
+  .f1__portfolio { font-size: 15cqw; }
+  .f1__pos--name { left: 4%; top: 2%; }
+  .f1__pos--amber { left: 47%; top: 13%; width: 49%; }
+  .f1__pos--green { left: 4%; top: 38%; width: 49%; }
+  .f1__pos--portfolio {
+    left: 4%;
+    top: 74%;
+    width: 92%;
+    justify-content: flex-end;
+  }
+  .f1__portfolio { text-align: right; }
+
+  .nk-hero__actions-wrap {
+    --hero-cta-h: 46px;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+  }
+  .nk-hero__actions { gap: 10px; }
+  .nk-hero__button {
+    --hover-button-w: clamp(140px, 41cqw, 168px);
+    font-size: 15px;
+    padding: 0 14px;
+  }
+
+  .nk-footer { padding: 56px 22px 28px; }
 }
