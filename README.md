@@ -16,6 +16,7 @@ npm install
 npm run dev      # local dev server
 npm run build    # production build into /dist
 npm run preview  # preview the production build
+npm run deploy   # build and deploy as a Cloudflare Worker with static assets
 ```
 
 Open the URL Vite prints (usually http://localhost:5173).
@@ -57,6 +58,38 @@ Everything lives in **`src/content.ts`** — edit this one file and the whole wa
 - **Contact form:** submissions post to `/api/contact`, which sends through Resend. Set
   `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `CONTACT_TO_EMAIL` in your deployment
   environment. See `.env.example` for the expected names.
+
+### Cloudflare Worker + Resend
+
+This repo can deploy as a Cloudflare Worker that serves the Vite `dist` assets and
+handles `POST /api/contact` from `worker/index.ts`.
+
+1. Confirm the Worker name in `wrangler.toml` matches your existing deployed Worker.
+2. Add the Resend API key as a Worker secret:
+
+   ```bash
+   npx wrangler secret put RESEND_API_KEY
+   ```
+
+3. Add non-secret Worker variables in the Cloudflare dashboard, or keep the defaults:
+
+   ```txt
+   RESEND_FROM_EMAIL=Portfolio Contact <onboarding@resend.dev>
+   CONTACT_TO_EMAIL=anvimsiddabhattuni@gmail.com
+   ```
+
+4. Deploy:
+
+   ```bash
+   npm run deploy
+   ```
+
+For local Worker testing, copy `.dev.vars.example` to `.dev.vars`, fill in the
+real key, and run:
+
+```bash
+npm run worker:dev
+```
 
 ---
 
