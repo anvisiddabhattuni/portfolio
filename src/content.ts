@@ -261,5 +261,5 @@ export const CONTACT = {
   linkedinProjects: 'https://www.linkedin.com/in/anvi-siddabhattuni/details/projects/',
   github: 'https://github.com/anvisiddabhattuni',
   devpost: 'https://devpost.com/anvisiddabhattuni',
-  resume: '/Anvi_Siddabhattuni_PM_Resume_JULY2026.pdf',
+  resume: '/Anvi_Siddabhattuni_Google_APM_Resume (1) (1).pdf',
 };
